@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LevelOne</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="#"><span class="mark">L</span><span class="brand-name"><b>Level</b><b>One</b></span></a>
+  <nav><a href="#stations">Station</a><a href="#harga">Harga</a><a href="#fasilitas">Fasilitas</a></nav>
+  <div class="admin-entry"><button class="nav-cta" id="adminOpen" type="button">🔒 Admin</button></div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow hero-slogan">PLAY, ENJOY, REPEAT</p>
+    <h1>Main Dulu, Pulang Belakangan</h1>
+    <p class="hero-text">Rental PlayStation dengan 12 station, tempat nyaman, dan suasana bermain yang santai.</p>
+    <div class="hero-actions"><a class="btn primary" href="#stations">Lihat Station <b>→</b></a><a class="btn ghost price-btn" href="#harga">Lihat Harga <b>↘</b></a><a class="btn ghost maps-btn" href="https://www.google.com/maps/dir/?api=1&destination=WCJ3%2B35C%2C%20Lawang%20Agung%2C%20Pondok%20Tinggi%2C%20Sungai%20Penuh%20City%2C%20Jambi%2037111" target="_blank" rel="noopener">Google Maps ↗</a></div>
+    <div class="stats"><div><strong>12</strong><span>Total Station</span></div><div><strong>8</strong><span>PS 3</span></div><div><strong>4</strong><span>PS 4</span></div></div>
+  </div>
+  <div class="hero-visual">
+    <div class="glow"></div>
+    <div class="visual-card">
+      <div class="vtop"><span class="live"></span> STATUS STATION <span>◉</span></div>
+      <div class="big-number" id="heroAvailable">12</div>
+      <div class="vlabel">STATION TERSEDIA</div>
+      <div class="mini-bars" id="heroBars"></div>
+    </div>
+  </div>
+</section>
+
+<section class="ticker"><span>PS 3</span><i>✦</i><span>PS 4</span><i>✦</i><span>12 STATION</span></section>
+
+<section id="stations" class="section">
+  <div class="section-head">
+    <div><p class="eyebrow">STATUS STATION</p><h2>Cek station<br>sebelum datang.</h2></div>
+    <p class="section-note">Status dan hitung mundur diperbarui otomatis.</p>
+  </div>
+  <div class="legend">
+    <span><i class="available"></i> Tersedia</span>
+    <span><i class="occupied"></i> Terisi</span>
+    <span><i class="offline"></i> Perbaikan</span>
+  </div>
+
+  <div class="station-group">
+    <div class="group-head"><h3>PS 3</h3><span>8 STATION</span></div>
+    <div class="station-grid" id="ps3Grid"></div>
+  </div>
+  <div class="station-group">
+    <div class="group-head"><h3>PS 4</h3><span>4 STATION</span></div>
+    <div class="station-grid" id="ps4Grid"></div>
+  </div>
+</section>
+
+<section id="harga" class="price-section">
+ <div class="price-copy"><p class="eyebrow">DAFTAR HARGA</p><h2>Harga jelas.<br>Langsung main.</h2><p>Harga dihitung per 30 menit. PS 3 mulai Rp3.000/30 menit dan PS 4 mulai Rp5.000/30 menit. Tarif 1 jam dan 2 jam tetap mengikuti daftar harga.</p></div>
+ <div class="price-table">
+  <div class="price-row head"><span>UNIT</span><span>DURASI</span><span>HARGA</span></div>
+  <div class="price-row"><b>PS 3</b><span>30 Menit</span><strong>Rp 3.000</strong></div>
+  <div class="price-row"><b>PS 3</b><span>1 Jam</span><strong>Rp 5.000</strong></div>
+  <div class="price-row"><b>PS 3</b><span>2 Jam</span><strong>Rp 10.000</strong></div>
+  <div class="price-row"><b>PS 4</b><span>30 Menit</span><strong>Rp 5.000</strong></div>
+  <div class="price-row"><b>PS 4</b><span>1 Jam</span><strong>Rp 8.000</strong></div>
+  <div class="price-row"><b>PS 4</b><span>2 Jam</span><strong>Rp 16.000</strong></div>
+ </div>
+</section>
+
+<section id="fasilitas" class="section facilities">
+ <div class="section-head"><div><p class="eyebrow">KENAPA LEVELONE</p><h2>Tempat nyaman.<br>Main lebih santai.</h2></div></div>
+ <div class="facility-grid">
+  <div class="facility"><span>01</span><h3>Nyaman</h3><p>Tempat duduk nyaman untuk bermain santai maupun lama.</p></div>
+  
+  <div class="facility"><span>03</span><h3>12 Station</h3><p>8 station PS 3 dan 4 station PS 4.</p></div>
+  <div class="facility"><span>04</span><h3>Status Station</h3><p>Lihat ketersediaan station sebelum bermain.</p></div>
+ </div>
+</section>
+
+<div class="admin-modal" id="adminModal" aria-hidden="true">
+  <div class="admin-backdrop" data-admin-close></div>
+  <div class="admin-dialog" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
+    <button class="admin-close" id="adminClose" type="button" aria-label="Tutup">×</button>
+    <div class="admin-anchor-title"><span class="lock">🔒 ADMIN</span><span>Pengelolaan Station</span></div>
+    <div id="loginPanel" class="login-panel">
+      <p class="eyebrow">AKSES PEMILIK</p>
+      <h2 id="adminModalTitle">Login Admin</h2>
+      <p>Masuk untuk mengelola status dan countdown semua station.</p>
+      <form id="loginForm">
+        <label>Username<input id="adminUsername" autocomplete="username" required></label>
+        <label>Password<input id="adminPassword" type="password" autocomplete="current-password" required></label>
+        <button class="btn primary" type="submit">Masuk sebagai Admin →</button>
+        <small id="loginError" class="login-error"></small>
+      </form>
+    </div>
+    <div id="adminPanel" hidden>
+      <div class="admin-head">
+        <div><p class="eyebrow">PANEL PEMILIK</p><h2>Kelola station</h2><p>Perubahan tersimpan di server dan dapat dilihat dari perangkat lain.</p></div>
+        <div class="admin-actions"><button class="btn ghost" id="resetBtn" type="button">Atur Ulang Semua</button><button class="btn ghost" id="logoutBtn" type="button">Keluar</button></div>
+      </div>
+      <div class="admin-summary">
+        <div><strong id="countAvailable">0</strong><span>Tersedia</span></div>
+        <div><strong id="countOccupied">0</strong><span>Terisi</span></div>
+        <div><strong id="countOffline">0</strong><span>Perbaikan</span></div>
+      </div>
+      <div class="admin-filter">
+        <button class="filter active" data-filter="all" type="button">Semua</button>
+        <button class="filter" data-filter="PS 3" type="button">PS 3</button>
+        <button class="filter" data-filter="PS 4" type="button">PS 4</button>
+      </div>
+      <div id="adminGrid" class="admin-grid"></div>
+
+      <section class="daily-report" aria-labelledby="dailyReportTitle">
+        <div class="report-head">
+          <div><p class="eyebrow">REKAP PEMASUKAN</p><h3 id="dailyReportTitle">Jam main & pemasukan</h3><p id="reportDateLabel">Hari ini</p></div>
+          <label class="report-date">Tanggal<input id="reportDate" type="date"></label>
+        </div>
+        <div class="report-period-tabs">
+          <button class="period-tab active" data-period="day" type="button">Harian</button>
+          <button class="period-tab" data-period="week" type="button">Mingguan</button>
+          <button class="period-tab" data-period="month" type="button">Bulanan</button>
+          <button class="period-tab" data-period="year" type="button">Tahunan</button>
+        </div>
+        <div class="report-summary">
+          <div><strong id="reportTotalHours">0 jam 0 menit</strong><span>Total waktu bermain</span></div>
+          <div><strong id="reportTotalRevenue">Rp 0</strong><span>Total pemasukan</span></div>
+          <div><strong id="reportTotalSessions">0</strong><span>Total transaksi</span></div>
+        </div>
+        <div class="report-table-head"><span>STATION</span><span>WAKTU MAIN</span><span>PEMASUKAN</span></div>
+        <div id="reportGrid" class="report-grid"></div>
+        <div class="revenue-chart-wrap">
+          <div class="chart-title"><span>GRAFIK PEMASUKAN</span><strong id="chartTotalLabel">Rp 0</strong></div>
+          <div id="revenueChart" class="revenue-chart"></div>
+        </div>
+        <p class="admin-note">Pemasukan mengikuti tarif awal yang dipilih. Jika pelanggan selesai lebih cepat, transaksi tetap dihitung sesuai tarif awal dan tidak dipotong.</p>
+      </section>
+      <p class="admin-note">Status station tersimpan di server dan dapat dikelola dari perangkat lain.</p>
+    </div>
+  </div>
+</div>
+
+<section id="lokasi" class="location"><div><p class="eyebrow">LOKASI</p><h2>LEVELONE PS</h2><p>WCJ3+35C, Lawang Agung, Pondok Tinggi, Sungai Penuh City, Jambi 37111</p></div></section>
+</main>
+
+<footer><div class="brand"><span class="mark">L</span><span class="brand-name"><b>Level</b><b>One</b></span></div><p>© 2026 LevelOne. Selamat bermain.</p></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
