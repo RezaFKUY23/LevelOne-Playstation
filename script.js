@@ -88,18 +88,19 @@ async function loadState({silent=false, renderAdminPanel=true} = {}){
   }
 }
 
+// Render penuh semua card — hanya dipanggil saat status berubah atau pertama load
 function renderPublic(){
   const p3 = document.getElementById("ps3Grid");
   const p4 = document.getElementById("ps4Grid");
   if(!p3 || !p4) return;
-  p3.innerHTML = "";
-  p4.innerHTML = "";
 
+  // Auto-complete dulu sebelum render
+  let anyCompleted = false;
   stations.forEach(s => {
-    // Auto-complete: waktu habis → otomatis tersedia
     if(s.status === "occupied" && s.end_at && remaining(s) === null){
       s.status = "available";
       s.end_at = null;
+      anyCompleted = true;
       if(sb){
         const now = new Date().toISOString();
         sb.from("stations").update({status:"available", end_at:null, updated_at:now}).eq("id", s.id).then(({error}) => {
@@ -107,20 +108,48 @@ function renderPublic(){
         });
       }
     }
+  });
+
+  p3.innerHTML = "";
+  p4.innerHTML = "";
+
+  stations.forEach(s => {
     const rem = remaining(s);
     const label = statusLabel(s);
     const time = s.status === "available" ? "Siap dimainkan" : s.status === "offline" ? "Sedang perbaikan" : (rem ? fmt(rem) : "00:00");
     const endClock = s.status === "occupied" && s.end_at ? formatClock(s.end_at) : "—";
     const card = document.createElement("div");
     card.className = `station ${s.status}`;
+    card.dataset.stationId = s.id;
     const deviceState = s.status === "occupied" ? "on" : "off";
-     // Semua station PS 3 wajib memakai asset stik PS 3 ini.
-     const controllerImage = s.type === "PS 3" ? "controller-ps3.png" : "controller.png";
-     const activityText = s.status === "offline" ? "Perbaikan" : "Sedang Bermain";
-     card.innerHTML = `<div class="station-top"><span class="station-id">Station ${s.station_number}</span><span class="status"><i class="status-dot"></i>${label}</span></div><div class="station-devices ${deviceState}" aria-label="Perangkat station"><div class="tv-unit" aria-hidden="true"><span class="tv-screen"><img class="tv-logo-photo" src="tv-logo.png?v=2" alt=""><span class="tv-game-glow"></span></span><span class="tv-led"></span><span class="tv-stand"></span></div><div class="station-controller" aria-hidden="true"><span class="controller-photo ${s.type === "PS 3" ? "ps3-controller" : "ps4-controller"}"><img src="${controllerImage}" alt="Stik PlayStation"><i class="controller-led" aria-hidden="true"></i></span></div></div><div class="device-state ${s.status}"><span class="device-light"></span><span class="device-label">${activityText}</span></div><div class="countdown">${time}</div>${s.status === "occupied" ? `<div class="public-endtime">Estimasi habis: <strong>${endClock}</strong></div>` : ""}`;
+    const controllerImage = s.type === "PS 3" ? "controller-ps3.png" : "controller.png";
+    const activityText = s.status === "offline" ? "Perbaikan" : "Sedang Bermain";
+    card.innerHTML = `<div class="station-top"><span class="station-id">Station ${s.station_number}</span><span class="status"><i class="status-dot"></i>${label}</span></div><div class="station-devices ${deviceState}" aria-label="Perangkat station"><div class="tv-unit" aria-hidden="true"><span class="tv-screen"><img class="tv-logo-photo" src="tv-logo.png?v=2" alt=""><span class="tv-game-glow"></span></span><span class="tv-led"></span><span class="tv-stand"></span></div><div class="station-controller" aria-hidden="true"><span class="controller-photo ${s.type === "PS 3" ? "ps3-controller" : "ps4-controller"}"><img src="${controllerImage}" alt="Stik PlayStation"><i class="controller-led" aria-hidden="true"></i></span></div></div><div class="device-state ${s.status}"><span class="device-light"></span><span class="device-label">${activityText}</span></div><div class="countdown" data-countdown="${s.id}">${time}</div>${s.status === "occupied" ? `<div class="public-endtime">Estimasi habis: <strong data-endclock="${s.id}">${endClock}</strong></div>` : ""}`;
     (s.type === "PS 3" ? p3 : p4).appendChild(card);
   });
 
+  updateHeroStats();
+}
+
+// Tick tiap detik — hanya update teks countdown, tidak re-render card
+function tickCountdowns(){
+  let needFullRender = false;
+  stations.forEach(s => {
+    if(s.status === "occupied" && s.end_at){
+      const rem = remaining(s);
+      if(rem === null){
+        // Waktu habis — butuh full render untuk ganti class card
+        needFullRender = true;
+        return;
+      }
+      const el = document.querySelector(`[data-countdown="${s.id}"]`);
+      if(el) el.textContent = fmt(rem);
+    }
+  });
+  if(needFullRender) renderPublic();
+}
+
+function updateHeroStats(){
   const ps3 = stations.filter(s => s.type === "PS 3");
   const ps4 = stations.filter(s => s.type === "PS 4");
   document.getElementById("heroAvailablePS3").textContent = ps3.filter(s => s.status === "available").length;
@@ -654,7 +683,7 @@ document.querySelectorAll(".period-tab").forEach(btn => btn.addEventListener("cl
     isAdmin = !!session?.user && session.user.email === ADMIN_EMAIL;
     updateAdminVisibility();
   });
-  setInterval(() => renderPublic(), 1000);
+  setInterval(() => tickCountdowns(), 1000);
   // Jangan render ulang panel admin dari polling. Ini mencegah input durasi
   // terganti, angka menghilang, fokus hilang, dan keyboard iOS tertutup sendiri.
   setInterval(() => loadState({silent:true, renderAdminPanel:false}), 3000);
