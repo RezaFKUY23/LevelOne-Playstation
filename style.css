@@ -749,3 +749,262 @@ footer {
   .countdown { font-size: 22px; }
   .station { min-height: 195px; padding: 14px 12px 13px; }
 }
+
+/* ===== V10 — fix biru → kuning, station card overhaul ===== */
+
+/* ── Hapus semua sisa biru dari V9 ── */
+.mark {
+  background: linear-gradient(135deg, rgba(255,212,90,0.1), rgba(239,75,75,0.08));
+  border: 1px solid rgba(255,212,90,0.35);
+  box-shadow: 0 0 16px rgba(255,212,90,0.12), inset 0 1px rgba(255,255,255,0.06);
+}
+.hero {
+  background:
+    radial-gradient(ellipse 55% 65% at 70% 40%, rgba(255,212,90,0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 35% 40% at 12% 65%, rgba(239,75,75,0.04) 0%, transparent 45%);
+}
+.visual-card {
+  background: linear-gradient(145deg, #14120a, #07090d);
+  border: 1px solid rgba(255,212,90,0.12);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 50px rgba(255,212,90,0.04), inset 0 1px rgba(255,255,255,0.04);
+}
+.visual-card:before {
+  background: linear-gradient(135deg, rgba(255,212,90,0.05), transparent 40%);
+}
+.hero-split-label { color: #ffd45a; }
+.hero-split-divider { background: rgba(255,212,90,0.1); }
+
+/* tombol primary tetap menonjol tapi pakai kuning */
+.btn.primary {
+  background: linear-gradient(135deg, #ffd45a, #e8b800);
+  color: #111;
+  border-color: transparent;
+  box-shadow: 0 8px 28px rgba(255,212,90,0.3), inset 0 1px rgba(255,255,255,0.2);
+}
+.btn.primary:hover { box-shadow: 0 12px 36px rgba(255,212,90,0.45); }
+.maps-btn { border-color: rgba(255,212,90,0.15) !important; background: rgba(255,212,90,0.04) !important; }
+.maps-btn:hover { border-color: rgba(255,212,90,0.3) !important; background: rgba(255,212,90,0.08) !important; }
+
+/* ticker dot */
+.ticker i { color: #ffd45a; opacity: 0.8; }
+
+/* price strong */
+.price-row strong { color: #ffd45a; }
+
+/* admin dialog glow netral */
+.admin-dialog { box-shadow: 0 50px 120px rgba(0,0,0,0.9); }
+
+/* occupied station → kuning hangat bukan biru */
+.station.occupied {
+  background: linear-gradient(145deg, #171209, #0d0c05);
+  border-color: rgba(255,212,90,0.22);
+  box-shadow: 0 0 40px rgba(255,212,90,0.08), 0 18px 50px rgba(0,0,0,0.6), inset 0 1px rgba(255,212,90,0.04);
+}
+
+/* controller LED → kuning */
+.station-devices.on .controller-led {
+  background: #ffd45a;
+  box-shadow: 0 0 6px #ffd45a, 0 0 16px rgba(255,212,90,0.7), 0 0 28px rgba(255,212,90,0.35);
+}
+
+/* countdown occupied */
+.station.occupied .countdown { color: #ffd45a; text-shadow: 0 0 20px rgba(255,212,90,0.4); }
+
+/* ── STATION CARD — angka besar isi penuh ── */
+/* Sembunyikan visual TV/controller dari tampilan publik — pakai ruang untuk angka */
+.station .station-devices,
+.station .device-state {
+  display: none;
+}
+
+/* Layout ulang card: flex column, angka countdown jadi elemen utama */
+.station {
+  min-height: 160px;
+  padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Baris atas: nama + status */
+.station-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.station-id {
+  font: 700 15px/1 "Space Grotesk";
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+
+/* Angka countdown — isi sisa ruang, sangat besar */
+.station .countdown {
+  font: 700 clamp(44px, 5.5vw, 72px)/1 "Space Grotesk";
+  letter-spacing: -3px;
+  margin: 0;
+  padding: 8px 0 4px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-height: unset;
+}
+.station.available .countdown {
+  color: rgba(255,255,255,0.18);
+  font-size: clamp(18px, 2vw, 22px);
+  letter-spacing: 0px;
+  font-weight: 500;
+  align-items: flex-end;
+  padding-bottom: 2px;
+}
+.station.offline .countdown {
+  color: rgba(255,77,79,0.5);
+  font-size: clamp(14px, 1.6vw, 18px);
+  letter-spacing: 0;
+  font-weight: 500;
+  align-items: flex-end;
+  padding-bottom: 2px;
+}
+
+/* Estimasi selesai — baris bawah */
+.station .public-endtime {
+  font-size: 10px;
+  color: #636b74;
+  flex-shrink: 0;
+  margin-top: 0;
+  text-align: left;
+}
+.station.occupied .public-endtime strong { color: #ffd45a; }
+
+/* Available: status dot lebih jelas */
+.station.available .status { color: #20c56b; }
+
+@media(max-width:800px) {
+  .station { min-height: 140px; }
+  .station .countdown { font-size: clamp(38px, 7vw, 56px); }
+}
+@media(max-width:480px) {
+  .station { min-height: 125px; padding: 14px 13px 12px; }
+  .station .countdown { font-size: clamp(34px, 9vw, 48px); letter-spacing: -2px; }
+  .station-id { font-size: 13px; }
+}
+
+/* ── Tambahan kedalaman visual ── */
+/* Subtle noise texture via pseudo on body */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.022;
+}
+
+/* Hero card sheen */
+.visual-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,212,90,0.06) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+/* Station card inner glow top edge */
+.station::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  pointer-events: none;
+}
+.station.available::after { background: rgba(32,197,107,0.15); }
+.station.occupied::after  { background: rgba(255,212,90,0.12); }
+.station.offline::after   { background: rgba(255,77,79,0.1); }
+
+/* Stronger glow on occupied */
+.station.occupied {
+  box-shadow:
+    0 0 0 1px rgba(255,212,90,0.08),
+    0 0 50px rgba(255,212,90,0.1),
+    0 24px 60px rgba(0,0,0,0.65),
+    inset 0 1px rgba(255,212,90,0.05);
+}
+
+
+/* ===== V10.1 — revert warna teks/border ke netral, kuning HANYA glow/ambient ===== */
+
+/* Brand mark — netral */
+.mark {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: inset 0 1px rgba(255,255,255,0.07);
+  color: #ffd45a;
+}
+
+/* Btn primary — putih bersih */
+.btn.primary {
+  background: #fff;
+  color: #080a0d;
+  border-color: transparent;
+  box-shadow: 0 8px 28px rgba(255,255,255,0.12), inset 0 1px rgba(255,255,255,0.3);
+}
+.btn.primary:hover { box-shadow: 0 12px 36px rgba(255,255,255,0.2); }
+
+/* Maps btn — netral */
+.maps-btn { border-color: rgba(255,255,255,0.1) !important; background: rgba(255,255,255,0.03) !important; }
+.maps-btn:hover { border-color: rgba(255,255,255,0.2) !important; background: rgba(255,255,255,0.06) !important; }
+
+/* Ticker dot — abu */
+.ticker i { color: #4a5560; opacity: 1; }
+
+/* Price strong — putih */
+.price-row strong { color: #f4f5f7; }
+
+/* Hero-split-label — abu terang */
+.hero-split-label { color: #9da3ab; }
+
+/* Visual card — gelap netral, glow kuning subtle di background SAJA */
+.visual-card {
+  background: linear-gradient(145deg, #111318, #07090d);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow:
+    0 40px 100px rgba(0,0,0,0.75),
+    inset 0 1px rgba(255,255,255,0.04);
+}
+/* Glow kuning hanya di ::before sebagai ambient di belakang card */
+.visual-card::before {
+  background: radial-gradient(ellipse 80% 60% at 50% 110%, rgba(255,212,90,0.12), transparent 65%);
+  pointer-events: none;
+}
+
+/* Station occupied — dark netral, glow kuning ambient di luar */
+.station.occupied {
+  background: linear-gradient(145deg, #0f1115, #07090d);
+  border-color: rgba(255,255,255,0.1);
+  box-shadow:
+    0 0 60px rgba(255,212,90,0.08),
+    0 24px 60px rgba(0,0,0,0.65),
+    inset 0 1px rgba(255,255,255,0.04);
+}
+/* Countdown timer tetap kuning (itu memang warna status aslinya dari V6) */
+.station.occupied .countdown { color: #ffd45a; text-shadow: 0 0 24px rgba(255,212,90,0.35); }
+.station.occupied::after { background: rgba(255,212,90,0.1); }
+
+/* Controller LED — putih/abu */
+.station-devices.on .controller-led {
+  background: #c8cdd4;
+  box-shadow: 0 0 6px rgba(200,205,212,0.6), 0 0 14px rgba(200,205,212,0.3);
+}
+
+/* Hero background — glow kuning subtle hanya di sisi kanan (ambient) */
+.hero {
+  background:
+    radial-gradient(ellipse 50% 60% at 78% 48%, rgba(255,212,90,0.055) 0%, transparent 55%),
+    radial-gradient(ellipse 30% 35% at 10% 70%, rgba(255,212,90,0.025) 0%, transparent 50%);
+}
+
