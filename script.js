@@ -659,3 +659,22 @@ document.querySelectorAll(".period-tab").forEach(btn => btn.addEventListener("cl
   // terganti, angka menghilang, fokus hilang, dan keyboard iOS tertutup sendiri.
   setInterval(() => loadState({silent:true, renderAdminPanel:false}), 3000);
 })();
+
+/* ── Secret admin trigger: klik logo footer 5× dalam 3 detik ── */
+(function() {
+  let clickCount = 0;
+  let clickTimer = null;
+  const footerMark = document.querySelector('footer .mark');
+  if (!footerMark) return;
+  footerMark.style.cursor = 'default';
+  footerMark.addEventListener('click', function(e) {
+    clickCount++;
+    clearTimeout(clickTimer);
+    if (clickCount >= 5) {
+      clickCount = 0;
+      document.getElementById('adminOpen')?.click();
+      return;
+    }
+    clickTimer = setTimeout(function() { clickCount = 0; }, 3000);
+  });
+})();
