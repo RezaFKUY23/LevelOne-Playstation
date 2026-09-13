@@ -558,8 +558,8 @@ body {
   font-size: 10px;
   letter-spacing: 3px;
   font-weight: 600;
-  color: #4b8dff;
-  text-shadow: 0 0 20px rgba(75,141,255,0.5);
+  color: #ffd45a;
+  text-shadow: 0 0 18px rgba(255,212,90,0.45);
 }
 
 /* ── Hero card ── */
@@ -726,4 +726,26 @@ footer {
 /* ── Scroll behavior ── */
 @media (prefers-reduced-motion: no-preference) {
   .station { will-change: transform; }
+}
+
+/* ── V9.1 station font enlargement ── */
+.station-id { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
+.status { font-size: 10px; }
+.countdown { font: 700 28px/1 "Space Grotesk"; letter-spacing: -1px; margin-top: 10px; min-height: 32px; }
+.station.offline .countdown { font-size: 13px; letter-spacing: 0; }
+.device-state { font-size: 9px; letter-spacing: 1.2px; }
+.public-endtime { font-size: 10px; }
+
+/* station card fills space better */
+.station { min-height: 215px; padding: 18px 18px 16px; }
+.station-devices { height: 92px; }
+
+@media(max-width:800px) {
+  .countdown { font-size: 24px; }
+  .station { min-height: 205px; }
+}
+@media(max-width:480px) {
+  .station-id { font-size: 14px; }
+  .countdown { font-size: 22px; }
+  .station { min-height: 195px; padding: 14px 12px 13px; }
 }
