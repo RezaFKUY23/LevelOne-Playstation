@@ -96,6 +96,17 @@ function renderPublic(){
   p4.innerHTML = "";
 
   stations.forEach(s => {
+    // Auto-complete: waktu habis → otomatis tersedia
+    if(s.status === "occupied" && s.end_at && remaining(s) === null){
+      s.status = "available";
+      s.end_at = null;
+      if(sb){
+        const now = new Date().toISOString();
+        sb.from("stations").update({status:"available", end_at:null, updated_at:now}).eq("id", s.id).then(({error}) => {
+          if(error) console.warn("Auto-complete gagal:", error);
+        });
+      }
+    }
     const rem = remaining(s);
     const label = statusLabel(s);
     const time = s.status === "available" ? "Siap dimainkan" : s.status === "offline" ? "Sedang perbaikan" : (rem ? fmt(rem) : "00:00");
