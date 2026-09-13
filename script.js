@@ -88,59 +88,6 @@ async function loadState({silent=false, renderAdminPanel=true} = {}){
   }
 }
 
-function ps3svg(status){
-  const glow = status === "occupied" ? "#0070d1" : status === "offline" ? "#555" : "#0070d188";
-  const ledColor = status === "occupied" ? "#0070d1" : status === "offline" ? "#333" : "#0070d144";
-  return `<svg viewBox="0 0 180 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:100%;max-width:180px;display:block;margin:0 auto">
-    <ellipse cx="90" cy="148" rx="70" ry="9" fill="#00000055"/>
-    <polygon points="22,82 90,46 158,82 90,118" fill="#242424" stroke="#383838" stroke-width="0.5"/>
-    <polygon points="158,82 158,128 90,164 90,118" fill="#161616" stroke="#1c1c1c" stroke-width="0.5"/>
-    <polygon points="22,82 22,128 90,164 90,118" fill="#1c1c1c" stroke="#141414" stroke-width="0.5"/>
-    <polygon points="48,74 112,40 122,45 58,79" fill="#181818"/>
-    <line x1="49" y1="75" x2="113" y2="41" stroke="#3a3a3a" stroke-width="1"/>
-    <circle cx="48" cy="117" r="5.5" fill="#181818" stroke="${glow}" stroke-width="1.2"/>
-    <circle cx="48" cy="117" r="2.5" fill="${ledColor}"/>
-    <circle cx="60" cy="121" r="3.5" fill="#181818" stroke="#333" stroke-width="0.7"/>
-    <rect x="34" y="106" width="8" height="5" rx="1" fill="#2a2a2a" stroke="#3a3a3a" stroke-width="0.3"/>
-    <rect x="45" y="106" width="8" height="5" rx="1" fill="#2a2a2a" stroke="#3a3a3a" stroke-width="0.3"/>
-    <line x1="115" y1="98" x2="140" y2="85" stroke="#2a2a2a" stroke-width="0.8"/>
-    <line x1="115" y1="105" x2="140" y2="92" stroke="#2a2a2a" stroke-width="0.8"/>
-    <line x1="115" y1="112" x2="140" y2="99" stroke="#2a2a2a" stroke-width="0.8"/>
-    <line x1="115" y1="119" x2="140" y2="106" stroke="#2a2a2a" stroke-width="0.8"/>
-    <line x1="115" y1="126" x2="140" y2="113" stroke="#2a2a2a" stroke-width="0.8"/>
-    <text x="95" y="97" font-family="Arial,sans-serif" font-size="9" font-weight="bold" fill="#0070d1" text-anchor="middle" transform="rotate(-28,95,97)">PS3</text>
-  </svg>`;
-}
-
-function ps4svg(status){
-  const glow = status === "occupied" ? "#003fb5" : status === "offline" ? "#555" : "#003fb588";
-  const ledColor = status === "occupied" ? "#003fb5" : status === "offline" ? "#333" : "#003fb544";
-  return `<svg viewBox="0 0 180 170" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:100%;max-width:180px;display:block;margin:0 auto">
-    <ellipse cx="90" cy="156" rx="76" ry="10" fill="#00000055"/>
-    <polygon points="14,94 90,50 166,94 90,138" fill="#242424" stroke="#343434" stroke-width="0.5"/>
-    <polygon points="166,94 166,142 90,186 90,138" fill="#161616" stroke="#1a1a1a" stroke-width="0.5"/>
-    <polygon points="14,94 14,142 90,186 90,138" fill="#1c1c1c" stroke="#111" stroke-width="0.5"/>
-    <polygon points="26,86 90,46 154,86 90,126" fill="#222" stroke="#333" stroke-width="0.5"/>
-    <polygon points="154,86 154,112 90,152 90,126" fill="#1a1a1a" stroke="#161616" stroke-width="0.5"/>
-    <polygon points="26,86 26,112 90,152 90,126" fill="#181818" stroke="#0e0e0e" stroke-width="0.5"/>
-    <polygon points="38,78 90,50 142,78 90,106" fill="#282828" stroke="#3c3c3c" stroke-width="0.5"/>
-    <polygon points="142,78 142,94 90,122 90,106" fill="#1e1e1e" stroke="#161616" stroke-width="0.5"/>
-    <polygon points="38,78 38,94 90,122 90,106" fill="#161616" stroke="#0e0e0e" stroke-width="0.5"/>
-    <line x1="38" y1="78" x2="142" y2="78" stroke="${glow}" stroke-width="0.9" opacity="0.7"/>
-    <circle cx="28" cy="132" r="5.5" fill="#181818" stroke="${glow}" stroke-width="1.2"/>
-    <circle cx="28" cy="132" r="2.5" fill="${ledColor}"/>
-    <rect x="38" y="134" width="7" height="4" rx="1" fill="#252525" stroke="#333" stroke-width="0.3"/>
-    <rect x="20" y="88" width="1.5" height="28" rx="0.5" fill="#303030" transform="skewY(-28)"/>
-    <line x1="123" y1="100" x2="148" y2="87" stroke="#2a2a2a" stroke-width="0.8"/>
-    <line x1="123" y1="107" x2="148" y2="94" stroke="#2a2a2a" stroke-width="0.8"/>
-    <line x1="123" y1="114" x2="148" y2="101" stroke="#2a2a2a" stroke-width="0.8"/>
-    <line x1="123" y1="121" x2="148" y2="108" stroke="#2a2a2a" stroke-width="0.8"/>
-    <line x1="123" y1="128" x2="148" y2="115" stroke="#2a2a2a" stroke-width="0.8"/>
-    <line x1="123" y1="135" x2="148" y2="122" stroke="#2a2a2a" stroke-width="0.8"/>
-    <text x="98" y="106" font-family="Arial,sans-serif" font-size="9" font-weight="bold" fill="#003fb5" text-anchor="middle" transform="rotate(-28,98,106)">PS4</text>
-  </svg>`;
-}
-
 function renderPublic(){
   const p3 = document.getElementById("ps3Grid");
   const p4 = document.getElementById("ps4Grid");
@@ -170,8 +117,7 @@ function renderPublic(){
      // Semua station PS 3 wajib memakai asset stik PS 3 ini.
      const controllerImage = s.type === "PS 3" ? "controller-ps3.png" : "controller.png";
      const activityText = s.status === "offline" ? "Perbaikan" : "Sedang Bermain";
-     const consoleSvg = s.type === "PS 3" ? ps3svg(s.status) : ps4svg(s.status);
-     card.innerHTML = `<div class="station-top"><span class="station-id">Station ${s.station_number}</span><span class="status"><i class="status-dot"></i>${label}</span></div><div class="station-devices ${deviceState}" aria-label="Perangkat station"><div class="tv-unit" aria-hidden="true"><span class="tv-screen"><img class="tv-logo-photo" src="tv-logo.png?v=2" alt=""><span class="tv-game-glow"></span></span><span class="tv-led"></span><span class="tv-stand"></span></div><div class="station-controller" aria-hidden="true"><span class="controller-photo ${s.type === "PS 3" ? "ps3-controller" : "ps4-controller"}"><img src="${controllerImage}" alt="Stik PlayStation"><i class="controller-led" aria-hidden="true"></i></span></div></div><div class="device-state ${s.status}"><span class="device-light"></span><span class="device-label">${activityText}</span></div><div class="countdown">${time}</div>${s.status === "occupied" ? `<div class="public-endtime">Estimasi habis: <strong>${endClock}</strong></div>` : ""}<div class="console-3d">${consoleSvg}</div>`;
+     card.innerHTML = `<div class="station-top"><span class="station-id">Station ${s.station_number}</span><span class="status"><i class="status-dot"></i>${label}</span></div><div class="station-devices ${deviceState}" aria-label="Perangkat station"><div class="tv-unit" aria-hidden="true"><span class="tv-screen"><img class="tv-logo-photo" src="tv-logo.png?v=2" alt=""><span class="tv-game-glow"></span></span><span class="tv-led"></span><span class="tv-stand"></span></div><div class="station-controller" aria-hidden="true"><span class="controller-photo ${s.type === "PS 3" ? "ps3-controller" : "ps4-controller"}"><img src="${controllerImage}" alt="Stik PlayStation"><i class="controller-led" aria-hidden="true"></i></span></div></div><div class="device-state ${s.status}"><span class="device-light"></span><span class="device-label">${activityText}</span></div><div class="countdown">${time}</div>${s.status === "occupied" ? `<div class="public-endtime">Estimasi habis: <strong>${endClock}</strong></div>` : ""}`;
     (s.type === "PS 3" ? p3 : p4).appendChild(card);
   });
 

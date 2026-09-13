@@ -328,6 +328,170 @@ body.modal-open{overflow:hidden}
 @media(max-width:800px){.report-modal .report-dialog{max-height:94vh;padding:38px 20px 24px;}}
 @media(max-width:600px){.report-modal .report-dialog{padding:36px 15px 20px;}.report-modal .report-head{align-items:flex-start;flex-direction:column;}.report-modal .report-date{width:100%;}.report-modal .report-date input{width:100%;box-sizing:border-box;}}
 
-.console-3d{padding:10px 8px 4px;display:flex;align-items:center;justify-content:center;border-top:1px solid #1e2229;margin-top:8px}
-.console-3d svg{filter:drop-shadow(0 4px 10px #0007);transition:transform .3s ease}
-.station:hover .console-3d svg{transform:translateY(-3px)}
+
+/* V15 — Ergonomic layout polish
+   Layout/spacing only: existing features, controls, data and interactions remain intact. */
+:root{
+  --content:1180px;
+  --gutter:clamp(20px,5vw,72px);
+  --section-space:clamp(72px,9vw,112px);
+}
+body{min-width:320px;line-height:1.45}
+.nav{padding-inline:var(--gutter);height:72px}
+.nav nav{gap:28px}
+.nav-cta{min-height:42px;padding-inline:16px}
+.hero{
+  width:min(100%,1280px);margin-inline:auto;
+  min-height:620px;padding:clamp(70px,8vw,100px) var(--gutter) clamp(60px,7vw,84px);
+  gap:clamp(36px,6vw,84px)
+}
+.hero-copy{width:54%;max-width:650px}
+.hero-visual{width:46%;min-width:0}
+.hero h1{max-width:700px;font-size:clamp(46px,5.4vw,72px);line-height:.98;letter-spacing:-3px}
+.hero-text{max-width:500px;margin:24px 0}
+.hero-actions{flex-wrap:wrap;align-items:center}
+.hero-actions .btn{min-height:46px}
+.stats{gap:clamp(24px,4vw,42px);margin-top:42px}
+.visual-card{transform:none;width:min(430px,100%);height:330px}
+.ticker{padding-inline:var(--gutter)}
+.section,.facilities{width:min(100%,1280px);margin-inline:auto;padding:var(--section-space) var(--gutter)}
+.section-head{gap:40px}
+.section h2{margin:0}
+.legend{flex-wrap:wrap;gap:12px 24px}
+.station-group{margin-top:42px}
+.station-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.station{min-height:210px;padding:17px}
+.station-top{min-height:25px}
+.station-devices{margin-top:10px}
+.price-section{
+  padding:var(--section-space) var(--gutter);
+  grid-template-columns:minmax(260px,.72fr) minmax(0,1.28fr);
+  gap:clamp(40px,7vw,90px);
+}
+.price-copy{align-self:start;position:sticky;top:100px}
+.price-table{min-width:0}
+.price-row{min-height:54px;align-items:center;padding:15px 0}
+.facility-grid{gap:0}
+.facility{padding-top:30px}
+.location{width:min(100%,1280px);margin:0 auto 90px;padding:35px var(--gutter) 0}
+footer{padding-inline:var(--gutter);gap:20px}
+
+/* Admin: clearer hierarchy and safer touch targets without changing controls */
+.admin-dialog{width:min(1060px,100%);padding:40px clamp(20px,4vw,48px)}
+.admin-head{gap:28px}
+.admin-actions{flex-wrap:wrap;justify-content:flex-end}
+.admin-actions .btn{min-height:42px}
+.admin-summary{gap:12px}
+.admin-summary div{min-height:82px;display:flex;flex-direction:column;justify-content:center}
+.admin-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.admin-card{padding:16px}
+.admin-controls button,.duration-options button,.extend-options button,.filter,.period-tab{min-height:40px}
+.admin-time{min-height:40px}
+.admin-time input{min-height:40px}
+.admin-time button{min-width:72px}
+.extend-box{margin-top:12px}
+.report-dialog{width:min(1120px,100%)}
+
+/* Tablet */
+@media(max-width:1000px){
+  .hero{gap:35px}
+  .hero-copy{width:55%}
+  .hero-visual{width:45%}
+  .station-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .price-section{grid-template-columns:1fr;gap:42px}
+  .price-copy{position:static}
+}
+
+/* Mobile: one-column reading order, generous touch areas, no clipped controls */
+@media(max-width:800px){
+  .nav{height:68px;padding-inline:18px}
+  .brand-name{font-size:18px}
+  .nav-cta{min-height:40px;padding-inline:14px}
+  .hero{
+    display:flex;flex-direction:column;align-items:stretch;
+    padding:58px 20px 64px;gap:48px;
+  }
+  .hero-copy,.hero-visual{width:100%;max-width:none}
+  .hero h1{font-size:clamp(42px,11vw,58px);letter-spacing:-2.4px}
+  .hero-text{margin:20px 0;max-width:560px}
+  .hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .hero-actions .btn{width:100%;min-width:0;min-height:48px;padding:12px 14px}
+  .hero-actions .maps-btn{grid-column:1/-1}
+  .stats{margin-top:34px;justify-content:space-between;max-width:430px}
+  .hero-visual{margin-top:0}
+  .visual-card{width:min(470px,100%);margin-inline:auto;height:300px}
+  .section,.facilities{padding:76px 20px}
+  .section-head{margin-bottom:22px}
+  .section-head h2,.price-copy h2{font-size:15px}
+  .section-note{max-width:520px}
+  .station-group{margin-top:34px}
+  .station-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .station{min-height:198px}
+  .price-section{display:grid;padding:76px 20px;gap:34px}
+  .price-row{grid-template-columns:1.1fr 1fr 1fr;column-gap:8px}
+  .facility-grid{grid-template-columns:1fr 1fr;display:grid}
+  .facility{min-height:175px;border-right:0;border-bottom:1px solid #292e35;padding:24px 16px 20px 0}
+  .facility:not(:first-child){padding-left:16px}
+  .facility:nth-child(2n){border-left:1px solid #292e35;padding-left:16px}
+  .facility:nth-last-child(-n+2){border-bottom:0}
+  .location{margin-bottom:65px;padding:28px 20px 0}
+  footer{padding:24px 20px;flex-direction:column;align-items:flex-start;gap:10px}
+
+  .admin-modal{padding:8px}
+  .admin-dialog{width:100%;max-height:96vh;padding:40px 18px 22px;border-radius:20px}
+  .admin-anchor-title{margin-bottom:24px}
+  .admin-dialog .admin-head{gap:18px;margin-bottom:20px}
+  .admin-actions{display:grid;grid-template-columns:repeat(3,1fr);width:100%;gap:7px}
+  .admin-actions .btn{width:100%;padding-inline:8px}
+  .admin-summary{gap:8px}
+  .admin-summary div{padding:14px 10px;min-height:76px}
+  .admin-summary strong{font-size:25px}
+  .admin-grid{grid-template-columns:1fr;gap:10px}
+  .admin-card{padding:14px}
+  .report-modal .admin-dialog{padding:40px 18px 22px}
+}
+
+/* Small phones */
+@media(max-width:480px){
+  .nav{padding-inline:14px}
+  .nav-cta{font-size:12px;padding-inline:12px}
+  .hero{padding:48px 16px 54px;gap:38px}
+  .hero h1{font-size:clamp(38px,11.5vw,50px)}
+  .hero-actions{grid-template-columns:1fr}
+  .hero-actions .maps-btn{grid-column:auto}
+  .stats{gap:14px}
+  .stats strong{font-size:20px}
+  .stats span{font-size:9px}
+  .visual-card{height:270px;padding:18px}
+  .hero-split-col .big-number{font-size:68px}
+  .section,.facilities{padding:62px 16px}
+  .station-grid{gap:8px}
+  .station{min-height:190px;padding:13px 10px}
+  .station-id{font-size:12px}
+  .station-devices{height:76px}
+  .price-section{padding:62px 16px}
+  .price-row{font-size:11px;min-height:50px}
+  .price-row.head{font-size:8px}
+  .facility-grid{grid-template-columns:1fr}
+  .facility,.facility:nth-child(2n){border-left:0;border-bottom:1px solid #292e35;padding:22px 0}
+  .facility:last-child{border-bottom:0}
+  .facility:not(:first-child){padding-left:0}
+  .location{padding-inline:16px}
+  footer{padding-inline:16px}
+
+  .admin-modal{padding:6px}
+  .admin-dialog,.report-modal .admin-dialog{padding:38px 13px 18px;border-radius:18px}
+  .admin-actions{grid-template-columns:1fr}
+  .admin-actions .btn{min-height:44px}
+  .admin-summary strong{font-size:22px}
+  .admin-summary span{font-size:9px}
+  .admin-line{gap:7px}
+  .admin-station-title{max-width:100%}
+  .duration-options,.extend-options,.reduce-options{gap:6px}
+  .duration-options button,.extend-options button,.reduce-options button{min-height:42px}
+  .admin-time{gap:6px}
+  .admin-time button{min-width:68px}
+  .report-summary{gap:7px}
+  .report-summary div{padding:12px 9px}
+  .report-summary strong{font-size:14px}
+}
