@@ -443,8 +443,8 @@ async function setStatus(id, status){
   if(loading) return;
   let minutes = null;
   if(status === "occupied"){
-    minutes = parseInt(document.getElementById(`time-${id}`)?.value || "60", 10);
-    if(!minutes || minutes < 30 || minutes % 30 !== 0){ showToast("Durasi harus kelipatan 30 menit (30, 60, 90, dst.).", "error"); return; }
+    minutes = parseInt(document.getElementById(`time-${id}`)?.value || "", 10);
+    if(!minutes || minutes < 30 || minutes % 30 !== 0){ showToast("Pilih durasi dulu sebelum mengatur station menjadi Terisi.", "error"); return; }
   }
   try{
     loading = true;
