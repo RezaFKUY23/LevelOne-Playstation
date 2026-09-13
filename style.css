@@ -20,6 +20,7 @@ a{text-decoration:none;color:inherit}
 .live{width:6px;height:6px;border-radius:50%;background:#ffd45a;box-shadow:0 0 12px #ffd45a}.big-number{font:700 130px/.9 "Space Grotesk";margin-top:55px;letter-spacing:-8px}
 .vlabel{font-size:9px;color:#717780;letter-spacing:1.6px;margin-top:12px}.mini-bars{display:flex;gap:5px;margin-top:28px}.mini-bars i{height:5px;flex:1;background:#ffd45a;border-radius:10px}
 .mini-bars i.off{background:#31363d}.mini-bars i.used{background:#f0c76d}
+.hero-split{display:flex;align-items:stretch;gap:0;margin-top:16px;height:calc(100% - 36px)}.hero-split-col{flex:1;display:flex;flex-direction:column;align-items:center}.hero-split-col .big-number{font:700 72px/.85 "Space Grotesk";margin-top:8px;letter-spacing:-4px}.hero-split-col .vlabel{font-size:8px;color:#717780;letter-spacing:1.6px;margin-top:6px}.hero-split-col .mini-bars{margin-top:12px;justify-content:center}.hero-split-label{font-size:9px;letter-spacing:2px;color:#ffd45a;font-weight:700}.hero-split-divider{width:1px;background:#292f37;margin:0 8px}
 .ticker{height:66px;border-top:1px solid #181b20;border-bottom:1px solid #181b20;display:flex;align-items:center;justify-content:space-evenly;color:#747a82;font:600 11px "Space Grotesk";letter-spacing:1.5px}.ticker i{color:#ffd45a;font-style:normal}
 .section{padding:115px 8vw}.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:28px}
 .section h2,.price-copy h2,.section-note{color:#777e86;max-width:330px;line-height:1.6;font-size:12px}.legend{display:flex;gap:22px;color:#747a82;font-size:10px;margin-bottom:30px}
@@ -100,15 +101,18 @@ body.modal-open{overflow:hidden}
 .station{min-height:205px;padding:17px 17px 15px;}
 .station-devices{height:88px;display:flex;align-items:center;justify-content:center;gap:20px;margin:9px 0 2px;position:relative;z-index:2}
 .tv-unit{width:82px;height:61px;position:relative;display:flex;align-items:center;justify-content:center;}
-.tv-screen{width:70px;height:45px;border:3px solid #303640;border-radius:7px;background:linear-gradient(145deg,#090b0e,#12161b);box-shadow:inset 0 0 0 2px #0a0c0f,0 7px 18px #0008;position:relative;overflow:hidden;transition:.25s ease;}
-.tv-screen:after{content:"";position:absolute;inset:5px;border:1px solid #252b32;border-radius:3px;}
+.tv-screen{width:70px;height:45px;border:3px solid #303640;border-radius:7px;background:#000;box-shadow:inset 0 0 0 2px #0a0c0f,0 7px 18px #0008;position:relative;overflow:hidden;transition:.25s ease;}
+.tv-logo-photo{position:absolute;left:50%;top:50%;width:86%;height:86%;transform:translate(-50%,-50%);object-fit:contain;opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease;z-index:1;filter:saturate(.96) contrast(.98);mix-blend-mode:screen;}
+.station-devices.on .tv-logo-photo{opacity:1;visibility:visible;}
+.station-devices.off .tv-screen{background:#000;}
+.tv-screen:after{content:none !important;display:none !important;}
 .tv-game-glow{position:absolute;width:34px;height:18px;left:18px;top:12px;border-radius:50%;background:#ffd45a00;filter:blur(7px);transition:.25s ease;}
 .tv-led{position:absolute;right:10px;bottom:7px;width:4px;height:4px;border-radius:50%;background:#353a40;transition:.25s ease;}
 .tv-stand{position:absolute;bottom:0;width:23px;height:5px;border-radius:4px;background:#292e35;}
 .controller-photo{width:100px;height:64px;display:flex;align-items:center;justify-content:center;position:relative;filter:drop-shadow(0 7px 10px #0009);}
 .controller-photo img{width:100px;height:auto;display:block;object-fit:contain;opacity:.58;filter:brightness(.72) saturate(.65);transition:.25s ease;}
 .controller-led{position:absolute;width:8px;height:4px;border-radius:50%;left:50%;top:47%;transform:translate(-50%,-50%);background:#363b42;box-shadow:none;transition:.25s ease;}
-.station-devices.on .tv-screen{border-color:#6d5c2b;box-shadow:inset 0 0 0 2px #0a0c0f,0 0 22px #ffd45a20,0 7px 18px #0008;}
+.station-devices.on .tv-screen{background:#000;border-color:#303640;box-shadow:inset 0 0 0 1px #ffffff08,0 7px 18px #0008;}
 .station-devices.on .tv-game-glow{background:#ffd45a66;}
 .station-devices.on .tv-led{background:#ffd45a;box-shadow:0 0 9px #ffd45a;}
 .station-devices.on .controller-photo img{opacity:1;filter:brightness(.9) saturate(.95);}
@@ -199,6 +203,7 @@ body.modal-open{overflow:hidden}
 .duration-options{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0 8px}.duration-options button{border:1px solid #292f37;background:#14181e;color:#9da3ab;border-radius:9px;padding:9px 8px;font:600 10px Inter,sans-serif;cursor:pointer;transition:.18s ease}.duration-options button:hover{border-color:#3d4652;background:#191e25;color:#f4f5f7}.duration-options button:active{transform:translateY(1px)}
 .admin-time input,.extend-custom input{background:#090c10;color:#eee;border:1px solid #2a3038;border-radius:9px;outline:none}.admin-time input:focus,.extend-custom input:focus{border-color:#4b8dff66;box-shadow:0 0 0 3px #4b8dff10}.admin-time button,.extend-custom button{border-radius:9px;background:#171c23;color:#e9edf2;border:1px solid #303741;padding:0 14px;font:700 10px Inter,sans-serif;cursor:pointer;transition:.18s ease}.admin-time button:hover,.extend-custom button:hover{background:#202631;border-color:#46515e}
 .extend-box{margin-top:12px;padding:12px;border:1px solid #29313b;background:linear-gradient(145deg,#0d1117,#0a0d11);border-radius:12px;box-shadow:inset 0 1px #ffffff06}.extend-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.extend-head>div{display:grid;gap:3px}.extend-kicker{color:#5f6873;font-size:7px;letter-spacing:1.3px;font-weight:700}.extend-head strong{font:600 11px "Space Grotesk";color:#e8ebef}.extend-head small{color:#59616b;font-size:8px}.extend-options{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.extend-options button{display:flex;align-items:baseline;justify-content:center;gap:4px;min-height:39px;border:1px solid #29313a;background:#151a21;color:#aeb5bd;border-radius:9px;cursor:pointer;transition:.18s ease}.extend-options button:hover{border-color:#3d536d;background:#19202a;color:#fff;transform:translateY(-1px)}.extend-options button:active{transform:translateY(0)}.extend-options button b{font:700 13px "Space Grotesk";color:#8fc4ff}.extend-options button span{font-size:8px;color:#69727c}.extend-custom{display:flex;gap:7px;margin-top:8px}.extend-custom input{min-width:0;flex:1;padding:9px 10px;font-size:10px}.extend-custom button{min-width:74px}
+.reduce-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid #20262d;margin-bottom:9px}.reduce-head>div{display:grid;gap:3px}.reduce-head strong{font:600 11px "Space Grotesk";color:#e8ebef}.reduce-head small{color:#59616b;font-size:8px}.reduce-options{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.reduce-options button{display:flex;align-items:baseline;justify-content:center;gap:4px;min-height:39px;border:1px solid #493333;background:#171316;color:#bdb3b3;border-radius:9px;cursor:pointer;transition:.18s ease}.reduce-options button:hover{border-color:#8a5050;background:#21171a;color:#fff;transform:translateY(-1px)}.reduce-options button:active{transform:translateY(0)}.reduce-options button b{font:700 13px "Space Grotesk";color:#ff9b9b}.reduce-options button span{font-size:8px;color:#766b6d}.reduce-custom button{border-color:#493333}.reduce-custom button:hover{background:#24181b;border-color:#8a5050}
 .admin-endtime{display:grid;grid-template-columns:auto 1fr auto;gap:6px;align-items:center;margin-top:10px;padding-top:9px;border-top:1px solid #20262d}.admin-endtime>span{color:#626b75;font-size:8px;text-transform:uppercase;letter-spacing:.7px}.admin-endtime strong{justify-self:start;color:#8fc4ff;font:700 11px "Space Grotesk"}.finish-btn{width:auto;margin:0!important;padding:8px 10px;border:1px solid #6a5420;background:#1d180b;color:#ffd45a;border-radius:8px;font:700 9px "Space Grotesk";cursor:pointer}.finish-btn:hover{background:#2a210c}
 @media(max-width:600px){.admin-station-title{gap:6px}.admin-station-title strong{font-size:11px}.status-pill{padding:4px 6px;font-size:7px}.status-remaining{font-size:8px}.extend-head{align-items:flex-start}.extend-head small{display:none}.admin-endtime{grid-template-columns:1fr auto}.admin-endtime .finish-btn{grid-column:1/-1;width:100%}}
 @media(max-width:420px){.duration-options{gap:5px}.duration-options button{padding:8px 4px;font-size:9px}.extend-box{padding:10px}.extend-options button{min-height:36px}.extend-options button b{font-size:12px}}
@@ -216,11 +221,109 @@ body.modal-open{overflow:hidden}
 .price-btn{border-color:#30353d;}
 .price-btn:hover{border-color:#4b8dff;color:#fff;}
 .tv-screen{display:flex;align-items:center;justify-content:center;}
-.tv-screen:before{content:"PS";position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font:800 15px/1 "Space Grotesk";letter-spacing:-1.5px;color:#eef2f7;opacity:.78;z-index:2;}
-.tv-screen:after{content:"PLAYSTATION";position:absolute;inset:auto 0 5px;text-align:center;border:0;color:#707883;font:700 4px/1 Inter,sans-serif;letter-spacing:1px;z-index:2;}
-.station-devices.on .tv-screen:before{color:#fff;opacity:1;text-shadow:0 0 7px #fff8,0 0 16px #59a7ff99;}
-.station-devices.on .tv-screen:after{color:#9db9d8;}
+.tv-screen:before{content:"";display:none;}
+.tv-screen:after{content:none !important;display:none !important;}
+
 .controller-led{left:50%;top:18%;width:29%;height:2.5px;border-radius:0;clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%);}
 .station-devices.on .controller-led{background:#62b0ff;box-shadow:0 0 4px #62b0ff,0 0 10px #62b0ff,0 0 20px #62b0ffcc,0 0 34px #62b0ff66;}
 .station-devices.off .controller-led{background:#343a42;box-shadow:none;}
 @media(max-width:480px){.controller-led{top:17%;width:28%;height:2px}.hero-actions .price-btn{min-width:145px;}}
+
+
+/* V11 — PS3 controller asset, activity label, and stable duration input */
+.device-state{gap:0;letter-spacing:1.1px;}
+.device-state .device-label{color:#626a74;transition:color .2s ease,text-shadow .2s ease,opacity .2s ease;}
+.device-state.available .device-label{color:#626a74;opacity:.62;}
+.device-state.occupied .device-label{color:#20c56b;opacity:1;text-shadow:0 0 7px #20c56b88,0 0 16px #20c56b44;}
+.device-state.offline .device-label{color:#737a82;opacity:.58;}
+.device-state .device-light{display:none;}
+.admin-actions .btn{color:#fff !important;}
+.admin-actions .btn:hover{color:#fff !important;}
+
+/* V12 — activity text only + protected admin duration input */
+.device-state{
+  background:transparent !important;
+  box-shadow:none !important;
+  border:0 !important;
+}
+.device-state .device-label{
+  display:inline-block;
+  background:transparent !important;
+  color:#626a74;
+  opacity:.58;
+  text-shadow:none;
+  transition:color .2s ease, text-shadow .2s ease, opacity .2s ease;
+}
+.device-state.available .device-label{
+  color:#626a74;
+  opacity:.48;
+  text-shadow:none;
+}
+.device-state.occupied .device-label{
+  color:#20c56b;
+  opacity:1;
+  text-shadow:0 0 7px #20c56b88,0 0 16px #20c56b44;
+}
+.device-state.offline .device-label{
+  color:#737a82;
+  opacity:.52;
+  text-shadow:none;
+}
+.admin-time input{
+  -webkit-appearance:none;
+  appearance:none;
+  opacity:1;
+  visibility:visible;
+}
+
+
+/* V13 — PS3 light bar precisely aligned to the actual controller artwork.
+   The PS3 PNG has transparent space above the controller, so positioning the
+   LED near the top of .controller-photo puts it visibly offside. */
+.controller-photo .controller-led{
+  left:50%;
+  top:31.5%;
+  width:13%;
+  height:2px;
+  border-radius:1px;
+  transform:translate(-50%,-50%);
+  clip-path:none;
+}
+.station-devices.on .controller-photo .controller-led{
+  background:#62b0ff;
+  box-shadow:0 0 4px #62b0ff,0 0 9px #62b0ff,0 0 17px #62b0ff99;
+}
+.station-devices.off .controller-photo .controller-led{
+  background:#343a42;
+  box-shadow:none;
+}
+@media(max-width:480px){
+  .controller-photo .controller-led{
+    top:31.5%;
+    width:13%;
+    height:2px;
+  }
+}
+
+
+/* V14 — transaction history, add-time confirmation, independent PS3/PS4 LEDs */
+.report-history-title{display:flex;justify-content:space-between;align-items:end;gap:14px;margin:22px 0 9px}.report-history-title .eyebrow{margin:0}.report-history-title>span{color:#59616b;font-size:8px}.report-table-wrap{border:1px solid #242a31;border-radius:12px;overflow:auto}.report-table-wrap .report-grid{border:0;border-radius:0;min-width:690px}.transaction-head,.transaction-row{grid-template-columns:.9fr 1.2fr 1.25fr .95fr 1fr}.transaction-row{padding:12px;background:#0d1014;border-bottom:1px solid #1f242b;font-size:10px}.transaction-row strong{font:600 10px Inter,sans-serif;color:#d8dce1}.transaction-row span{color:#8e959d}.transaction-row b{text-align:right;color:#ffd45a;font:700 11px "Space Grotesk"}.report-empty{padding:24px;text-align:center;color:#626a74;font-size:10px;background:#0d1014}.extend-options button.added{border-color:#20c56b;background:#102218;box-shadow:0 0 16px #20c56b20}.extend-options button.added b,.extend-options button.added span{color:#20c56b}.levelone-toast{position:fixed;left:50%;top:22px;bottom:auto;transform:translate(-50%,-18px);z-index:3000;opacity:0;pointer-events:none;background:#10151b;border:1px solid #20c56b70;color:#dfffea;border-radius:15px;padding:16px 22px;min-width:280px;max-width:min(92vw,560px);box-shadow:0 18px 50px #000b,0 0 24px #20c56b18;font:700 14px/1.35 Inter,sans-serif;text-align:center;transition:opacity .22s ease,transform .22s ease;white-space:normal}.levelone-toast.show{opacity:1;transform:translate(-50%,0)}.levelone-toast.error{border-color:#ff4d4f80;color:#ffe3e3;box-shadow:0 18px 50px #000b,0 0 24px #ff4d4f18}
+/* PS3 and PS4 use separate light-bar positions. */
+.controller-photo.ps3-controller .controller-led{left:50%;top:31.5%;width:13%;height:2px}
+.controller-photo.ps4-controller .controller-led{left:50%;top:17.5%;width:28%;height:2.5px}
+.station-devices.on .controller-photo.ps4-controller .controller-led{background:#62b0ff;box-shadow:0 0 4px #62b0ff,0 0 10px #62b0ff,0 0 20px #62b0ffcc,0 0 34px #62b0ff66}
+.station-devices.off .controller-photo.ps4-controller .controller-led{background:#343a42;box-shadow:none}
+@media(max-width:600px){.report-history-title{align-items:flex-start;flex-direction:column;gap:4px}.report-table-wrap .report-grid{min-width:650px}.levelone-toast{left:16px;right:16px;top:16px;transform:translateY(-18px);min-width:0;max-width:none;padding:15px 18px;font-size:13px}.levelone-toast.show{transform:translateY(0)}}
+@media(max-width:480px){.controller-photo.ps3-controller .controller-led{top:31.5%;width:13%;height:2px}.controller-photo.ps4-controller .controller-led{top:16.5%;width:28%;height:2px}}
+
+@media(max-width:600px){.reduce-head{align-items:flex-start}.reduce-head small{display:none}}
+
+/* V14 — standalone admin-only revenue/history modal + clean TV screen */
+.report-modal .report-dialog{max-width:1100px;}
+.report-modal .daily-report{margin-top:0;padding-top:0;border-top:0;}
+.report-modal .report-head{margin-top:4px;}
+.report-modal .admin-anchor-title .lock{color:#8fc4ff;}
+.admin-actions #reportOpen{border-color:#8fc4ff55;color:#8fc4ff !important;}
+.admin-actions #reportOpen:hover{border-color:#8fc4ff;color:#fff !important;}
+@media(max-width:800px){.report-modal .report-dialog{max-height:94vh;padding:38px 20px 24px;}}
+@media(max-width:600px){.report-modal .report-dialog{padding:36px 15px 20px;}.report-modal .report-head{align-items:flex-start;flex-direction:column;}.report-modal .report-date{width:100%;}.report-modal .report-date input{width:100%;box-sizing:border-box;}}

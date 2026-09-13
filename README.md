@@ -33,7 +33,7 @@ Untuk project ini, akun tersebut adalah akun Admin LevelOne. Jangan gunakan pass
 ## 4. Konfigurasi project
 Project yang digunakan untuk LevelOne sudah dikonfigurasi di `supabase-config.js`.
 
-- Project URL: `https://uhhaaicmznywraoyciky.supabase.co`
+- Project URL: `https://mlflqrgsidzjgpffnkxg.supabase.co`
 - Publishable key: sudah dimasukkan ke file konfigurasi.
 
 Jika membuat salinan project baru, ganti dua nilai tersebut dengan URL dan Publishable key project baru.

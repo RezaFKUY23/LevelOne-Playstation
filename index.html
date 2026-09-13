@@ -29,9 +29,21 @@
     <div class="glow"></div>
     <div class="visual-card">
       <div class="vtop"><span class="live"></span> STATUS STATION <span>◉</span></div>
-      <div class="big-number" id="heroAvailable">12</div>
-      <div class="vlabel">STATION TERSEDIA</div>
-      <div class="mini-bars" id="heroBars"></div>
+      <div class="hero-split">
+        <div class="hero-split-col">
+          <div class="hero-split-label">PS 3</div>
+          <div class="big-number" id="heroAvailablePS3">8</div>
+          <div class="vlabel">TERSEDIA</div>
+          <div class="mini-bars" id="heroBarsPS3"></div>
+        </div>
+        <div class="hero-split-divider"></div>
+        <div class="hero-split-col">
+          <div class="hero-split-label">PS 4</div>
+          <div class="big-number" id="heroAvailablePS4">4</div>
+          <div class="vlabel">TERSEDIA</div>
+          <div class="mini-bars" id="heroBarsPS4"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -79,6 +91,7 @@
   
   <div class="facility"><span>03</span><h3>12 Station</h3><p>8 station PS 3 dan 4 station PS 4.</p></div>
   <div class="facility"><span>04</span><h3>Status Station</h3><p>Lihat ketersediaan station sebelum bermain.</p></div>
+  <div class="facility"><span>05</span><h3>Parkir Luas</h3><p>Parkir aman dan luas tersedia untuk semua pengunjung.</p></div>
  </div>
 </section>
 
@@ -101,7 +114,7 @@
     <div id="adminPanel" hidden>
       <div class="admin-head">
         <div><p class="eyebrow">PANEL PEMILIK</p><h2>Kelola station</h2><p>Perubahan tersimpan di server dan dapat dilihat dari perangkat lain.</p></div>
-        <div class="admin-actions"><button class="btn ghost" id="resetBtn" type="button">Atur Ulang Semua</button><button class="btn ghost" id="logoutBtn" type="button">Keluar</button></div>
+        <div class="admin-actions"><button class="btn ghost" id="reportOpen" type="button">📊 Rekap</button><button class="btn ghost" id="resetBtn" type="button">Atur Ulang Semua</button><button class="btn ghost" id="logoutBtn" type="button">Keluar</button></div>
       </div>
       <div class="admin-summary">
         <div><strong id="countAvailable">0</strong><span>Tersedia</span></div>
@@ -115,32 +128,41 @@
       </div>
       <div id="adminGrid" class="admin-grid"></div>
 
-      <section class="daily-report" aria-labelledby="dailyReportTitle">
-        <div class="report-head">
-          <div><p class="eyebrow">REKAP PEMASUKAN</p><h3 id="dailyReportTitle">Jam main & pemasukan</h3><p id="reportDateLabel">Hari ini</p></div>
-          <label class="report-date">Tanggal<input id="reportDate" type="date"></label>
-        </div>
-        <div class="report-period-tabs">
-          <button class="period-tab active" data-period="day" type="button">Harian</button>
-          <button class="period-tab" data-period="week" type="button">Mingguan</button>
-          <button class="period-tab" data-period="month" type="button">Bulanan</button>
-          <button class="period-tab" data-period="year" type="button">Tahunan</button>
-        </div>
-        <div class="report-summary">
-          <div><strong id="reportTotalHours">0 jam 0 menit</strong><span>Total waktu bermain</span></div>
-          <div><strong id="reportTotalRevenue">Rp 0</strong><span>Total pemasukan</span></div>
-          <div><strong id="reportTotalSessions">0</strong><span>Total transaksi</span></div>
-        </div>
-        <div class="report-table-head"><span>STATION</span><span>WAKTU MAIN</span><span>PEMASUKAN</span></div>
-        <div id="reportGrid" class="report-grid"></div>
-        <div class="revenue-chart-wrap">
-          <div class="chart-title"><span>GRAFIK PEMASUKAN</span><strong id="chartTotalLabel">Rp 0</strong></div>
-          <div id="revenueChart" class="revenue-chart"></div>
-        </div>
-        <p class="admin-note">Pemasukan mengikuti tarif awal yang dipilih. Jika pelanggan selesai lebih cepat, transaksi tetap dihitung sesuai tarif awal dan tidak dipotong.</p>
-      </section>
       <p class="admin-note">Status station tersimpan di server dan dapat dikelola dari perangkat lain.</p>
     </div>
+  </div>
+</div>
+
+<div class="admin-modal report-modal" id="reportModal" aria-hidden="true">
+  <div class="admin-backdrop" data-report-close></div>
+  <div class="admin-dialog report-dialog" role="dialog" aria-modal="true" aria-labelledby="reportModalTitle">
+    <button class="admin-close" id="reportClose" type="button" aria-label="Tutup">×</button>
+    <div class="admin-anchor-title"><span class="lock">📊 REKAP</span><span>Data pemasukan & riwayat transaksi</span></div>
+    <section class="daily-report" aria-labelledby="reportModalTitle">
+      <div class="report-head">
+        <div><p class="eyebrow">REKAP PEMASUKAN</p><h3 id="reportModalTitle">Jam main & pemasukan</h3><p id="reportDateLabel">Hari ini</p></div>
+        <label class="report-date">Tanggal<input id="reportDate" type="date"></label>
+      </div>
+      <div class="report-period-tabs">
+        <button class="period-tab active" data-period="day" type="button">Harian</button>
+        <button class="period-tab" data-period="week" type="button">Mingguan</button>
+        <button class="period-tab" data-period="month" type="button">Bulanan</button>
+        <button class="period-tab" data-period="year" type="button">Tahunan</button>
+      </div>
+      <div class="report-summary">
+        <div><strong id="reportTotalHours">0 jam 0 menit</strong><span>Total waktu bermain</span></div>
+        <div><strong id="reportTotalRevenue">Rp 0</strong><span>Total pemasukan</span></div>
+        <div><strong id="reportTotalSessions">0</strong><span>Total transaksi</span></div>
+      </div>
+      <div class="report-history-title"><p class="eyebrow">RIWAYAT TRANSAKSI</p><span>Jam awal → jam habis • tanggal • durasi • pemasukan</span></div>
+      <div class="report-table-wrap"><div class="report-table-head transaction-head"><span>TANGGAL</span><span>STATION</span><span>JAM MAIN</span><span>DURASI</span><span>PEMASUKAN</span></div>
+      <div id="reportGrid" class="report-grid"></div></div>
+      <div class="revenue-chart-wrap">
+        <div class="chart-title"><span>GRAFIK PEMASUKAN</span><strong id="chartTotalLabel">Rp 0</strong></div>
+        <div id="revenueChart" class="revenue-chart"></div>
+      </div>
+      <p class="admin-note">Pemasukan mengikuti tarif awal yang dipilih. Jika pelanggan selesai lebih cepat, transaksi tetap dihitung sesuai tarif awal dan tidak dipotong.</p>
+    </section>
   </div>
 </div>
 

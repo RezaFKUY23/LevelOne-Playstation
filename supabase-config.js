@@ -5,6 +5,6 @@
  * Jangan pernah memasukkan service_role key di sini.
  */
 window.LEVELONE_SUPABASE = {
-  url: "https://uhhaaicmznywraoyciky.supabase.co",
-  anonKey: "sb_publishable_4a8lh-fNjXNLj9c7mvdvOw_37my2Fx4"
+  url: "https://mlflqrgsidzjgpffnkxg.supabase.co",
+  anonKey: "sb_publishable_aEwBKLd_Gf6C1IGesJpMYw_b6Z4CSAI"
 };
