@@ -327,3 +327,7 @@ body.modal-open{overflow:hidden}
 .admin-actions #reportOpen:hover{border-color:#8fc4ff;color:#fff !important;}
 @media(max-width:800px){.report-modal .report-dialog{max-height:94vh;padding:38px 20px 24px;}}
 @media(max-width:600px){.report-modal .report-dialog{padding:36px 15px 20px;}.report-modal .report-head{align-items:flex-start;flex-direction:column;}.report-modal .report-date{width:100%;}.report-modal .report-date input{width:100%;box-sizing:border-box;}}
+
+.console-3d{padding:10px 8px 4px;display:flex;align-items:center;justify-content:center;border-top:1px solid #1e2229;margin-top:8px}
+.console-3d svg{filter:drop-shadow(0 4px 10px #0007);transition:transform .3s ease}
+.station:hover .console-3d svg{transform:translateY(-3px)}
