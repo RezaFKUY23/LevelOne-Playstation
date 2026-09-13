@@ -166,6 +166,17 @@
   </div>
 </div>
 
+<section id="model3d" class="section model3d-section">
+  <div class="section-head">
+    <div><p class="eyebrow">SCAN 3D</p><h2>Lihat dari<br>semua sudut.</h2></div>
+    <p class="section-note">Drag untuk putar · Scroll untuk zoom</p>
+  </div>
+  <div class="model3d-wrap">
+    <canvas id="model3dCanvas"></canvas>
+    <div class="model3d-hint">Drag untuk putar</div>
+  </div>
+</section>
+
 <section id="lokasi" class="location"><div><p class="eyebrow">LOKASI</p><h2>LEVELONE PS</h2><p>WCJ3+35C, Lawang Agung, Pondok Tinggi, Sungai Penuh City, Jambi 37111</p></div></section>
 </main>
 
@@ -173,5 +184,76 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="script.js"></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const canvas = document.getElementById('model3dCanvas');
+if(canvas){
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  const w = canvas.parentElement.clientWidth;
+  const h = Math.min(520, Math.max(320, w * 0.55));
+  renderer.setSize(w, h);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, w/h, 0.1, 2000);
+  camera.position.set(0, 60, 180);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.6;
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+  const dir1 = new THREE.DirectionalLight(0xffffff, 1.2);
+  dir1.position.set(1,2,2);
+  scene.add(dir1);
+  const dir2 = new THREE.DirectionalLight(0x8ab4ff, 0.4);
+  dir2.position.set(-2,-1,-1);
+  scene.add(dir2);
+
+  // Hint fade on interaction
+  const hint = document.querySelector('.model3d-hint');
+  renderer.domElement.addEventListener('pointerdown', () => { if(hint) hint.style.opacity='0'; });
+
+  const loader = new GLTFLoader();
+  loader.load('scan.glb', (gltf) => {
+    const model = gltf.scene;
+    // Center model
+    const box = new THREE.Box3().setFromObject(model);
+    const center = box.getCenter(new THREE.Vector3());
+    model.position.sub(center);
+    scene.add(model);
+
+    // Fit camera
+    const size = box.getSize(new THREE.Vector3()).length();
+    camera.position.set(0, size*0.25, size*0.9);
+    controls.target.set(0,0,0);
+    controls.update();
+  });
+
+  // Resize
+  window.addEventListener('resize', () => {
+    const nw = canvas.parentElement.clientWidth;
+    const nh = Math.min(520, Math.max(320, nw*0.55));
+    renderer.setSize(nw, nh);
+    camera.aspect = nw/nh;
+    camera.updateProjectionMatrix();
+  });
+
+  (function animate(){
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  })();
+}
+</script>
 </body>
 </html>

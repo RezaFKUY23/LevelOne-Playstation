@@ -1247,3 +1247,26 @@ body {
 .station.offline .controller-photo img { filter: brightness(.4) saturate(0) sepia(1) hue-rotate(320deg) !important; opacity: 0.5 !important; }
 .station.offline .tv-led { background: #ff4d4f !important; box-shadow: 0 0 8px rgba(255,77,79,0.6) !important; }
 
+
+/* ── 3D Model Section ── */
+.model3d-section { padding-bottom: 80px; }
+.model3d-wrap {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: #060709;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 1px rgba(255,255,255,0.04);
+  margin-top: 32px;
+}
+.model3d-wrap canvas { display: block; width: 100% !important; }
+.model3d-hint {
+  position: absolute;
+  bottom: 18px; left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.3);
+  font-size: 11px;
+  letter-spacing: 1px;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
