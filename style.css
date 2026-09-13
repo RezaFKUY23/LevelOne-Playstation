@@ -1104,3 +1104,93 @@ body {
   .hero-split-col .big-number { font-size: clamp(60px, 16vw, 78px) !important; letter-spacing: -3px !important; }
 }
 
+
+/* ===== V10.3 — tampilkan balik TV+stik, lampu indikator per status ===== */
+
+/* Munculkan kembali device visual dan device-state */
+.station .station-devices { display: flex !important; }
+.station .device-state    { display: flex !important; }
+
+/* Kembalikan layout station ke vertikal asli, tinggi lebih lega */
+.station {
+  min-height: 230px !important;
+  padding: 17px 17px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+/* Countdown ukuran sedang — ada di bawah device visual */
+.station .countdown {
+  font: 700 22px/1 "Space Grotesk" !important;
+  letter-spacing: -0.8px !important;
+  margin-top: 8px !important;
+  padding: 0 !important;
+  flex: 0 !important;
+  display: block !important;
+  min-height: 26px !important;
+}
+.station.available .countdown {
+  font-size: 13px !important;
+  letter-spacing: 0 !important;
+  font-weight: 500 !important;
+  color: #525961 !important;
+  align-items: unset !important;
+}
+.station.offline .countdown {
+  font-size: 13px !important;
+  letter-spacing: 0 !important;
+  font-weight: 500 !important;
+  color: rgba(255,77,79,0.45) !important;
+  align-items: unset !important;
+}
+
+/* device-state: lampu indikator status */
+.device-state {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  height: 18px !important;
+  font: 700 8px/1 "Space Grotesk" !important;
+  letter-spacing: 1px !important;
+  margin-top: 4px !important;
+}
+
+/* Warna lampu sesuai status */
+.station.available .device-light {
+  background: #20c56b !important;
+  box-shadow: 0 0 7px #20c56b, 0 0 14px rgba(32,197,107,0.5) !important;
+  animation: none !important;
+}
+.station.available .device-state { color: #20c56b !important; }
+
+.station.occupied .device-light {
+  background: #ffd45a !important;
+  box-shadow: 0 0 7px #ffd45a, 0 0 14px rgba(255,212,90,0.5) !important;
+  animation: devicePulse 1.6s ease-in-out infinite !important;
+}
+.station.occupied .device-state { color: #ffd45a !important; }
+
+.station.offline .device-light {
+  background: #ff4d4f !important;
+  box-shadow: 0 0 7px #ff4d4f, 0 0 12px rgba(255,77,79,0.4) !important;
+  animation: none !important;
+}
+.station.offline .device-state { color: #ff4d4f !important; }
+
+/* Ukuran lampu sedikit lebih besar */
+.device-light { width: 6px !important; height: 6px !important; border-radius: 50% !important; }
+
+/* station-devices height */
+.station-devices { height: 88px !important; }
+
+@media(max-width:800px) {
+  .station { min-height: 210px !important; }
+  .station .countdown { font-size: 20px !important; }
+}
+@media(max-width:480px) {
+  .station { min-height: 195px !important; padding: 14px 12px 12px !important; }
+  .station .countdown { font-size: 18px !important; }
+  .station-id { font-size: 13px !important; }
+}
+
