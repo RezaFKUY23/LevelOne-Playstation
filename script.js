@@ -15,6 +15,7 @@ let adminFilter = "all";
 let isAdmin = false;
 let loading = false;
 let reportPeriod = "day";
+let currentReportRows = [];
 const durationDrafts = new Map();
 
 const FALLBACK_STATIONS = [
@@ -516,6 +517,85 @@ function formatPeriodLabel(start,end,period){
   return period === "day" ? start.toLocaleDateString("id-ID",{weekday:"long",year:"numeric",month:"long",day:"numeric"}) : `${a} — ${b}`;
 }
 
+
+function downloadReportPDF(){
+  if(!window.jspdf?.jsPDF){
+    showToast("Fitur PDF belum siap. Coba lagi sebentar.", "error");
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({orientation:"landscape", unit:"mm", format:"a4"});
+  const dateStr = selectedReportDate();
+  const {start, end} = periodBounds(dateStr, reportPeriod);
+  const rows = currentReportRows || [];
+  const totalMinutes = rows.reduce((n,r)=>n + Number(r.duration_minutes || 0), 0);
+  const totalRevenue = rows.reduce((n,r)=>n + Number(r.amount || 0), 0);
+  const totalSessions = rows.length;
+  const periodLabel = formatPeriodLabel(start,end,reportPeriod);
+
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(20);
+  doc.text("LEVELONE PS", 14, 17);
+  doc.setFontSize(12);
+  doc.text("Rekap Pemasukan & Riwayat Transaksi", 14, 25);
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(9);
+  doc.text(periodLabel, 14, 32);
+
+  const summaryY = 41;
+  const summary = [
+    ["Total Waktu Bermain", `${Math.floor(totalMinutes/60)} jam ${totalMinutes%60} menit`],
+    ["Total Pemasukan", formatRupiah(totalRevenue)],
+    ["Total Transaksi", String(totalSessions)]
+  ];
+  doc.autoTable({
+    startY: summaryY,
+    head: [["RINGKASAN", "NILAI"]],
+    body: summary,
+    theme: "grid",
+    styles: {fontSize:9, cellPadding:3},
+    headStyles: {fontStyle:"bold"}
+  });
+
+  const body = rows.map(r=>{
+    const started = new Date(r.started_at);
+    const plannedEnd = new Date(started.getTime()+Number(r.duration_minutes||0)*60000);
+    const finished = r.ended_at ? new Date(r.ended_at) : plannedEnd;
+    const endTime = isNaN(finished.getTime()) ? plannedEnd : finished;
+    const duration = Number(r.duration_minutes||0);
+    return [
+      started.toLocaleDateString("id-ID",{day:"2-digit",month:"2-digit",year:"numeric"}),
+      `${r.type} • Station ${r.station_number}`,
+      `${formatClock(started)} — ${formatClock(endTime)}`,
+      `${Math.floor(duration/60)} jam ${duration%60} menit`,
+      formatRupiah(r.amount)
+    ];
+  });
+
+  const tableStart = (doc.lastAutoTable?.finalY || 62) + 10;
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(11);
+  doc.text("RIWAYAT TRANSAKSI", 14, tableStart - 3);
+
+  doc.autoTable({
+    startY: tableStart,
+    head: [["Tanggal","Station","Jam Main","Durasi","Pemasukan"]],
+    body: body.length ? body : [["—","Belum ada transaksi","—","—","Rp 0"]],
+    theme: "grid",
+    styles: {fontSize:8.5, cellPadding:3},
+    headStyles: {fontStyle:"bold"},
+    columnStyles: {4:{halign:"right"}}
+  });
+
+  const footerY = Math.min((doc.lastAutoTable?.finalY || tableStart) + 12, 195);
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(8);
+  doc.text("LEVELONE PS • Dokumen dibuat dari sistem rekap admin.", 14, footerY);
+  const safeDate = dateStr.replaceAll("-","");
+  doc.save(`LEVELONE-Rekap-${reportPeriod}-${safeDate}.pdf`);
+  showToast("Rekap PDF berhasil dibuat.");
+}
+
 async function loadReport(){
   if(!isAdmin || !sb) return;
   const dateStr = selectedReportDate();
@@ -527,6 +607,7 @@ async function loadReport(){
     .order("started_at", {ascending:false});
   if(error){ console.warn("Gagal mengambil rekap", error); return; }
   const rows = data || [];
+  currentReportRows = rows;
   const totalMinutes = rows.reduce((n,r)=>n + Number(r.duration_minutes || 0), 0);
   const totalRevenue = rows.reduce((n,r)=>n + Number(r.amount || 0), 0);
   const totalSessions = rows.length;
@@ -670,6 +751,7 @@ document.querySelectorAll(".filter").forEach(btn => btn.addEventListener("click"
   renderAdmin();
 }));
 document.getElementById("loginForm").addEventListener("submit", loginAdmin);
+document.getElementById("reportPdfBtn")?.addEventListener("click", downloadReportPDF);
 const reportDate = document.getElementById("reportDate");
 if(reportDate){ reportDate.value = localDateInputValue(); reportDate.addEventListener("change", loadReport); }
 document.querySelectorAll(".period-tab").forEach(btn => btn.addEventListener("click", () => { document.querySelectorAll(".period-tab").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); reportPeriod=btn.dataset.period; loadReport(); }));
