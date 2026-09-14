@@ -532,68 +532,151 @@ function downloadReportPDF(){
   const totalSessions = rows.length;
   const periodLabel = formatPeriodLabel(start,end,reportPeriod);
 
-  // Thermal-receipt style: compact width, monospaced type, subtle separators.
-  const lineH = 4.5;
-  const rowLines = rows.reduce((sum,r)=>sum + 4, 0);
-  const paperHeight = Math.max(145, 103 + rowLines * lineH);
-  const doc = new jsPDF({orientation:"portrait", unit:"mm", format:[80, paperHeight]});
-  const x = 5;
-  const w = 70;
-  const center = 40;
-  const rupiah = n => formatRupiah(n).replace(/\u00a0/g," ").replace("Rp","Rp ");
-  const sep = (char="-") => char.repeat(46);
-  const text = (value, y, size=8, style="normal", align="left") => {
-    doc.setFont("courier", style);
+  // Clean A4 admin report: spacious, easy to scan, print-friendly.
+  const doc = new jsPDF({orientation:"portrait", unit:"mm", format:"a4"});
+  const pageW = 210;
+  const margin = 16;
+  const contentW = pageW - margin * 2;
+  const rupiah = n => formatRupiah(n).replace(/\u00a0/g," ");
+  const navy = [18, 27, 45];
+  const muted = [100, 108, 120];
+  const line = [220, 224, 230];
+  const soft = [246, 248, 251];
+  const accent = [255, 196, 72];
+
+  const setText = (size, color=navy, font="helvetica", style="normal") => {
+    doc.setFont(font, style);
     doc.setFontSize(size);
-    doc.text(String(value), align === "center" ? center : x, y, {align});
+    doc.setTextColor(...color);
   };
-  const twoCol = (label, value, y, size=7.5) => {
-    doc.setFont("courier","normal");
-    doc.setFontSize(size);
-    doc.text(String(label), x, y);
-    doc.text(String(value), x+w, y, {align:"right"});
+  const money = n => rupiah(n);
+  const formatDuration = mins => {
+    const h = Math.floor(mins/60), m = mins%60;
+    return h ? `${h} jam${m ? ` ${m} menit` : ""}` : `${m} menit`;
   };
 
-  let y = 9;
-  text("LEVELONE PS", y, 13, "bold", "center"); y += 5.5;
-  text("PLAY • EAT • ENJOY", y, 7, "normal", "center"); y += 5;
-  text(sep("="), y, 7, "normal", "center"); y += 5;
-  text("REKAP TRANSAKSI", y, 9, "bold", "center"); y += 5;
-  text(periodLabel, y, 6.5, "normal", "center"); y += 5;
-  text(sep(), y, 7, "normal", "center"); y += 5;
+  // Header
+  doc.setFillColor(...navy);
+  doc.roundedRect(margin, 14, contentW, 30, 4, 4, "F");
+  setText(17, [255,255,255], "helvetica", "bold");
+  doc.text("LEVELONE", margin+9, 27);
+  setText(8, [220,226,235], "helvetica", "normal");
+  doc.text("PLAY • EAT • ENJOY", margin+9, 33);
+  setText(8, [220,226,235]);
+  doc.text("REKAP TRANSAKSI", pageW-margin-9, 25, {align:"right"});
+  setText(9, [255,255,255], "helvetica", "bold");
+  doc.text(periodLabel, pageW-margin-9, 33, {align:"right"});
 
-  twoCol("TRANSAKSI", String(totalSessions), y); y += lineH;
-  const h = Math.floor(totalMinutes/60), m = totalMinutes%60;
-  twoCol("WAKTU MAIN", `${h}J ${m}M`, y); y += lineH;
-  twoCol("TOTAL", rupiah(totalRevenue), y, 8.5); y += 5;
-  text(sep("-"), y, 7, "normal", "center"); y += 5;
+  // Accent line
+  doc.setFillColor(...accent);
+  doc.roundedRect(margin, 48, contentW, 2.5, 1.25, 1.25, "F");
 
-  if(!rows.length){
-    text("BELUM ADA TRANSAKSI", y, 7.5, "bold", "center"); y += 5;
-  } else {
-    rows.forEach((r, i)=>{
-      const started = new Date(r.started_at);
-      const plannedEnd = new Date(started.getTime()+Number(r.duration_minutes||0)*60000);
-      const finished = r.ended_at ? new Date(r.ended_at) : plannedEnd;
-      const endTime = isNaN(finished.getTime()) ? plannedEnd : finished;
-      const duration = Number(r.duration_minutes||0);
-      const date = started.toLocaleDateString("id-ID",{day:"2-digit",month:"2-digit",year:"numeric"});
-      const time = `${formatClock(started)}-${formatClock(endTime)}`;
-      const dur = `${Math.floor(duration/60)}J ${duration%60}M`;
-      const station = `${r.type} / ST-${r.station_number}`;
-      text(`#${String(i+1).padStart(2,"0")}  ${date}`, y, 7.5, "bold"); y += lineH;
-      twoCol(station, rupiah(r.amount), y, 7.2); y += lineH;
-      twoCol(time, dur, y, 7.2); y += lineH;
-      text(sep(), y, 6.5, "normal", "center"); y += lineH;
+  // Summary cards
+  const cardGap = 5;
+  const cardW = (contentW - cardGap*2)/3;
+  const cardY = 57;
+  const cards = [
+    ["TOTAL TRANSAKSI", String(totalSessions)],
+    ["WAKTU BERMAIN", formatDuration(totalMinutes)],
+    ["TOTAL PEMASUKAN", money(totalRevenue)]
+  ];
+  cards.forEach((c,i)=>{
+    const x = margin + i*(cardW+cardGap);
+    doc.setFillColor(...soft);
+    doc.setDrawColor(...line);
+    doc.roundedRect(x, cardY, cardW, 27, 3, 3, "FD");
+    setText(7.5, muted, "helvetica", "bold");
+    doc.text(c[0], x+6, cardY+8);
+    setText(i===2 ? 12 : 13, navy, "helvetica", "bold");
+    doc.text(c[1], x+6, cardY+19);
+  });
+
+  // Section heading
+  setText(11, navy, "helvetica", "bold");
+  doc.text("Riwayat transaksi", margin, 96);
+  setText(7.5, muted);
+  doc.text("Detail sesi bermain pada periode yang dipilih", margin, 101);
+
+  const tableRows = rows.map((r,i)=>{
+    const started = new Date(r.started_at);
+    const plannedEnd = new Date(started.getTime()+Number(r.duration_minutes||0)*60000);
+    const finished = r.ended_at ? new Date(r.ended_at) : plannedEnd;
+    const endTime = isNaN(finished.getTime()) ? plannedEnd : finished;
+    const duration = Number(r.duration_minutes||0);
+    return [
+      String(i+1).padStart(2,"0"),
+      started.toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"}),
+      `${r.type}\nStation ${r.station_number}`,
+      `${formatClock(started)} – ${formatClock(endTime)}`,
+      formatDuration(duration),
+      money(r.amount)
+    ];
+  });
+
+  if(doc.autoTable){
+    doc.autoTable({
+      startY: 106,
+      margin: {left: margin, right: margin},
+      tableWidth: contentW,
+      head: [["NO","TANGGAL","STATION","JAM MAIN","DURASI","PEMASUKAN"]],
+      body: tableRows.length ? tableRows : [["—","—","Belum ada transaksi","—","—","Rp 0"]],
+      theme: "grid",
+      styles: {
+        font: "helvetica",
+        fontSize: 8,
+        textColor: navy,
+        cellPadding: {top:4,bottom:4,left:4,right:4},
+        lineColor: line,
+        lineWidth: 0.2,
+        valign: "middle"
+      },
+      headStyles: {
+        fillColor: navy,
+        textColor: [255,255,255],
+        fontStyle: "bold",
+        fontSize: 7.5,
+        halign: "center"
+      },
+      alternateRowStyles: {fillColor: [250,251,253]},
+      columnStyles: {
+        0:{halign:"center",cellWidth:12},
+        1:{cellWidth:31},
+        2:{cellWidth:39},
+        3:{cellWidth:36,halign:"center"},
+        4:{cellWidth:30,halign:"center"},
+        5:{halign:"right",fontStyle:"bold"}
+      },
+      didDrawPage: data => {
+        if(data.pageNumber > 1){
+          setText(8, muted, "helvetica", "bold");
+          doc.text("LEVELONE • REKAP TRANSAKSI", margin, 12);
+          doc.setDrawColor(...line);
+          doc.line(margin, 15, pageW-margin, 15);
+        }
+      }
     });
   }
 
-  text("TOTAL PEMASUKAN", y, 8, "bold"); y += 4.5;
-  text(rupiah(totalRevenue), y, 11, "bold", "center"); y += 6;
-  text(sep("="), y, 7, "normal", "center"); y += 5;
-  text("Terima kasih sudah bermain", y, 7, "normal", "center"); y += 4;
-  text("di LEVELONE PS", y, 7, "bold", "center"); y += 6;
-  text("Dokumen rekap admin", y, 6, "normal", "center");
+  let finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 9 : 115;
+  if(finalY > 260){ doc.addPage(); finalY = 22; }
+
+  // Total box
+  doc.setFillColor(...navy);
+  doc.roundedRect(margin, finalY, contentW, 25, 4, 4, "F");
+  setText(8, [205,214,228], "helvetica", "bold");
+  doc.text("TOTAL PEMASUKAN", margin+8, finalY+10);
+  setText(15, [255,255,255], "helvetica", "bold");
+  doc.text(money(totalRevenue), pageW-margin-8, finalY+15, {align:"right"});
+
+  // Footer
+  const footerY = 285;
+  doc.setDrawColor(...line);
+  doc.line(margin, footerY-7, pageW-margin, footerY-7);
+  setText(7.5, muted);
+  doc.text("Laporan ini dibuat dari data transaksi LEVELONE.", margin, footerY);
+  doc.text(`Dicetak: ${new Date().toLocaleString("id-ID")}`, pageW-margin, footerY, {align:"right"});
+  setText(7, muted);
+  doc.text("LEVELONE — Selamat bermain.", pageW/2, 292, {align:"center"});
 
   const safeDate = dateStr.replaceAll("-","");
   doc.save(`LEVELONE-Rekap-${reportPeriod}-${safeDate}.pdf`);
