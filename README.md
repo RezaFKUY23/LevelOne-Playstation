@@ -75,7 +75,7 @@ Panel admin sekarang memiliki kalender tanggal untuk melihat akumulasi per stati
 - jumlah transaksi;
 - rincian PS 3 Station 1-8 dan PS 4 Station 1-4.
 
-Tambahan durasi 30 menit: PS 3 Rp3.000 dan PS 4 Rp5.000. Tarif lama tetap: PS 3 1 jam Rp5.000, 2 jam Rp10.000; PS 4 1 jam Rp8.000, 2 jam Rp16.000. Durasi custom harus kelipatan 30 menit.
+Tambahan durasi 30 menit: PS 3 Rp3.000 dan PS 4 Rp4.000. Tarif lama tetap: PS 3 1 jam Rp5.000, 2 jam Rp10.000; PS 4 1 jam Rp8.000, 2 jam Rp16.000. Durasi custom harus kelipatan 30 menit.
 
 **Penting:** setelah versi ini dipasang, jalankan bagian SQL `REKAP PEMAKAIAN & PEMASUKAN HARIAN` pada `supabase.sql` di Supabase SQL Editor agar tabel rekap tersedia.
 

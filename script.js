@@ -192,10 +192,10 @@ function renderAdmin(){
   });
 }
 
-function ratePer30(type){ return type === "PS 4" ? 5000 : 3000; }
+function ratePer30(type){ return type === "PS 4" ? 4000 : 3000; }
 function priceForDuration(type, minutes){
   const is4 = type === "PS 4";
-  const half = is4 ? 5000 : 3000;
+  const half = is4 ? 4000 : 3000;
   const hour = is4 ? 8000 : 5000;
   const twoHour = is4 ? 16000 : 10000;
   minutes = Number(minutes || 0);
@@ -524,7 +524,6 @@ function downloadReportPDF(){
     return;
   }
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({orientation:"landscape", unit:"mm", format:"a4"});
   const dateStr = selectedReportDate();
   const {start, end} = periodBounds(dateStr, reportPeriod);
   const rows = currentReportRows || [];
@@ -533,69 +532,73 @@ function downloadReportPDF(){
   const totalSessions = rows.length;
   const periodLabel = formatPeriodLabel(start,end,reportPeriod);
 
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(20);
-  doc.text("LEVELONE PS", 14, 17);
-  doc.setFontSize(12);
-  doc.text("Rekap Pemasukan & Riwayat Transaksi", 14, 25);
-  doc.setFont("helvetica","normal");
-  doc.setFontSize(9);
-  doc.text(periodLabel, 14, 32);
+  // Thermal-receipt style: compact width, monospaced type, subtle separators.
+  const lineH = 4.5;
+  const rowLines = rows.reduce((sum,r)=>sum + 4, 0);
+  const paperHeight = Math.max(145, 103 + rowLines * lineH);
+  const doc = new jsPDF({orientation:"portrait", unit:"mm", format:[80, paperHeight]});
+  const x = 5;
+  const w = 70;
+  const center = 40;
+  const rupiah = n => formatRupiah(n).replace(/\u00a0/g," ").replace("Rp","Rp ");
+  const sep = (char="-") => char.repeat(46);
+  const text = (value, y, size=8, style="normal", align="left") => {
+    doc.setFont("courier", style);
+    doc.setFontSize(size);
+    doc.text(String(value), align === "center" ? center : x, y, {align});
+  };
+  const twoCol = (label, value, y, size=7.5) => {
+    doc.setFont("courier","normal");
+    doc.setFontSize(size);
+    doc.text(String(label), x, y);
+    doc.text(String(value), x+w, y, {align:"right"});
+  };
 
-  const summaryY = 41;
-  const summary = [
-    ["Total Waktu Bermain", `${Math.floor(totalMinutes/60)} jam ${totalMinutes%60} menit`],
-    ["Total Pemasukan", formatRupiah(totalRevenue)],
-    ["Total Transaksi", String(totalSessions)]
-  ];
-  doc.autoTable({
-    startY: summaryY,
-    head: [["RINGKASAN", "NILAI"]],
-    body: summary,
-    theme: "grid",
-    styles: {fontSize:9, cellPadding:3},
-    headStyles: {fontStyle:"bold"}
-  });
+  let y = 9;
+  text("LEVELONE PS", y, 13, "bold", "center"); y += 5.5;
+  text("PLAY • EAT • ENJOY", y, 7, "normal", "center"); y += 5;
+  text(sep("="), y, 7, "normal", "center"); y += 5;
+  text("REKAP TRANSAKSI", y, 9, "bold", "center"); y += 5;
+  text(periodLabel, y, 6.5, "normal", "center"); y += 5;
+  text(sep(), y, 7, "normal", "center"); y += 5;
 
-  const body = rows.map(r=>{
-    const started = new Date(r.started_at);
-    const plannedEnd = new Date(started.getTime()+Number(r.duration_minutes||0)*60000);
-    const finished = r.ended_at ? new Date(r.ended_at) : plannedEnd;
-    const endTime = isNaN(finished.getTime()) ? plannedEnd : finished;
-    const duration = Number(r.duration_minutes||0);
-    return [
-      started.toLocaleDateString("id-ID",{day:"2-digit",month:"2-digit",year:"numeric"}),
-      `${r.type} • Station ${r.station_number}`,
-      `${formatClock(started)} — ${formatClock(endTime)}`,
-      `${Math.floor(duration/60)} jam ${duration%60} menit`,
-      formatRupiah(r.amount)
-    ];
-  });
+  twoCol("TRANSAKSI", String(totalSessions), y); y += lineH;
+  const h = Math.floor(totalMinutes/60), m = totalMinutes%60;
+  twoCol("WAKTU MAIN", `${h}J ${m}M`, y); y += lineH;
+  twoCol("TOTAL", rupiah(totalRevenue), y, 8.5); y += 5;
+  text(sep("-"), y, 7, "normal", "center"); y += 5;
 
-  const tableStart = (doc.lastAutoTable?.finalY || 62) + 10;
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(11);
-  doc.text("RIWAYAT TRANSAKSI", 14, tableStart - 3);
+  if(!rows.length){
+    text("BELUM ADA TRANSAKSI", y, 7.5, "bold", "center"); y += 5;
+  } else {
+    rows.forEach((r, i)=>{
+      const started = new Date(r.started_at);
+      const plannedEnd = new Date(started.getTime()+Number(r.duration_minutes||0)*60000);
+      const finished = r.ended_at ? new Date(r.ended_at) : plannedEnd;
+      const endTime = isNaN(finished.getTime()) ? plannedEnd : finished;
+      const duration = Number(r.duration_minutes||0);
+      const date = started.toLocaleDateString("id-ID",{day:"2-digit",month:"2-digit",year:"numeric"});
+      const time = `${formatClock(started)}-${formatClock(endTime)}`;
+      const dur = `${Math.floor(duration/60)}J ${duration%60}M`;
+      const station = `${r.type} / ST-${r.station_number}`;
+      text(`#${String(i+1).padStart(2,"0")}  ${date}`, y, 7.5, "bold"); y += lineH;
+      twoCol(station, rupiah(r.amount), y, 7.2); y += lineH;
+      twoCol(time, dur, y, 7.2); y += lineH;
+      text(sep(), y, 6.5, "normal", "center"); y += lineH;
+    });
+  }
 
-  doc.autoTable({
-    startY: tableStart,
-    head: [["Tanggal","Station","Jam Main","Durasi","Pemasukan"]],
-    body: body.length ? body : [["—","Belum ada transaksi","—","—","Rp 0"]],
-    theme: "grid",
-    styles: {fontSize:8.5, cellPadding:3},
-    headStyles: {fontStyle:"bold"},
-    columnStyles: {4:{halign:"right"}}
-  });
+  text("TOTAL PEMASUKAN", y, 8, "bold"); y += 4.5;
+  text(rupiah(totalRevenue), y, 11, "bold", "center"); y += 6;
+  text(sep("="), y, 7, "normal", "center"); y += 5;
+  text("Terima kasih sudah bermain", y, 7, "normal", "center"); y += 4;
+  text("di LEVELONE PS", y, 7, "bold", "center"); y += 6;
+  text("Dokumen rekap admin", y, 6, "normal", "center");
 
-  const footerY = Math.min((doc.lastAutoTable?.finalY || tableStart) + 12, 195);
-  doc.setFont("helvetica","normal");
-  doc.setFontSize(8);
-  doc.text("LEVELONE PS • Dokumen dibuat dari sistem rekap admin.", 14, footerY);
   const safeDate = dateStr.replaceAll("-","");
   doc.save(`LEVELONE-Rekap-${reportPeriod}-${safeDate}.pdf`);
   showToast("Rekap PDF berhasil dibuat.");
 }
-
 async function loadReport(){
   if(!isAdmin || !sb) return;
   const dateStr = selectedReportDate();
